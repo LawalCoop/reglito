@@ -20,11 +20,31 @@
         </div>
         <div class="mb-8">
             <label for="matricule" class="block text-gray-700">Numero de matricula:</label>
-            <input type="text" id="matricule" name="matricule" class="form-input mt-1 block w-full pl-1" placeholder="Matricula" required>
+            <input type="number" id="matricule" name="matricule" class="form-input mt-1 block w-full pl-1" placeholder="Matricula" required>
         </div>
         <div id="nameError"></div> 
-        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" type="submit">Submit</button>
+        <button id="submitButton" class="px-4 py-2 rounded transition-colors disabled:cursor-not-allowed disabled:text-gray-600" type="submit" disabled>Submit</button>
     </form>
 </div>
+<script>
+    const nameInput = document.getElementById('name');
+    const matriculeInput = document.getElementById('matricule');
+    const submitButton = document.getElementById('submitButton');
+
+    nameInput.addEventListener('input', toggleButtonState);
+    matriculeInput.addEventListener('input', toggleButtonState);
+
+    function toggleButtonState() {
+        if (nameInput.value.trim() !== '' && matriculeInput.value.trim() !== '') {
+            submitButton.removeAttribute('disabled');
+            submitButton.classList.remove('bg-gray-300', 'text-gray-600', 'cursor-not-allowed');
+            submitButton.classList.add('bg-blue-500', 'text-white', 'hover:bg-blue-600');
+        } else {
+            submitButton.setAttribute('disabled', 'disabled');
+            submitButton.classList.remove('bg-blue-500', 'text-white', 'hover:bg-blue-600');
+            submitButton.classList.add('bg-gray-300', 'text-gray-600', 'cursor-not-allowed');
+        }
+    }
+</script>
 </body>
 </html>
