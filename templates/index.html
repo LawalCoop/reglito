@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Cedalio</title>
-        <!-- Tailwind CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    </head>
-
-    <body>
-        <p>HOLANDA</p>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reglito</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+<div class="text-center">
+    <h1 class="text-6xl font-bold mb-8">Reglito</h1>
+    <form class="max-w-md mx-auto">
+        <div class="mb-4">
+            <label for="name" class="block text-gray-700">Nombre de la cooperativa:</label>
+            <input type="text" id="name" name="name" class="form-input mt-1 block w-full pl-1" placeholder="Nombre">
+        </div>
+        <div class="mb-8">
+            <label for="matricule" class="block text-gray-700">Numero de matricula:</label>
+            <input type="text" id="matricule" name="matricule" class="form-input mt-1 block w-full pl-1" placeholder="Matricula">
+        </div>
+        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" type="submit">Submit</button>
+    </form>
+</div>
+</body>
 </html>

@@ -1,4 +1,5 @@
 use askama::Template;
+mod handlers;
 
 #[derive(Template)]
 #[template(path = "index.html")]
