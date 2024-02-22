@@ -10,6 +10,7 @@ use axum::{
     routing::get,
     Router,
 };
+use tower_livereload::LiveReloadLayer;
 
 async fn hello() -> impl IntoResponse {
     let template = HelloTemplate {};
@@ -25,7 +26,9 @@ async fn hello() -> impl IntoResponse {
 
 #[tokio::main]
 async fn main() {
-    let app = Router::new().route("/", get(hello));
+    let app = Router::new()
+        .route("/", get(hello))
+        .layer(LiveReloadLayer::new());
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8005").await.unwrap();
 
