@@ -1,7 +1,9 @@
 use askama::Template;
 mod handlers;
 use handlers::initialize_internal_rules;
+use migration::{Migrator, MigratorTrait};
 use serde::Deserialize;
+
 #[derive(Template)]
 #[template(path = "index.html")]
 struct HelloTemplate {}
@@ -28,13 +30,15 @@ async fn hello() -> impl IntoResponse {
             StatusCode::INTERNAL_SERVER_ERROR,
             format!("Failed to render template. Error: {err}"),
         )
-        .into_response(),
+            .into_response(),
     }
 }
 
-
 #[tokio::main]
 async fn main() {
+    let connection = sea_orm::Database::connect("sqlite::memory:").await.unwrap();
+    Migrator::up(&connection, None).await.unwrap();
+
     let app = Router::new()
         .route("/", get(hello))
         .route("/initialize", post(initialize_internal_rules::handler))

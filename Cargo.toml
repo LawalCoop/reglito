@@ -1,13 +1,30 @@
 [package]
-name = "generador-de-reglamento-interno"
+name = "reglito"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace]
+members = [".", "entity", "migration"]
+
 
 [dependencies]
 askama = "0.12.1"
 axum = "0.7.4"
 tokio = { version = "1.28", features = ["full"] }
 tower-livereload = "=0.9.2"
-serde = { version = "1.0", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+entity = { path = "entity" }
+migration = { path = "migration" }
+sea-orm = { features = [
+    "sqlx-sqlite",
+    "runtime-tokio-native-tls",
+    "macros",
+], workspace = true }
+
+[workspace.dependencies]
+sea-orm = { version = "0.12", features = [
+    "sqlx-sqlite",
+    "runtime-tokio-native-tls",
+    "macros",
+] }
+serde = { version = "1", features = ["derive"] }
