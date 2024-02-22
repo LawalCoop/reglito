@@ -12,15 +12,17 @@
 <body class="bg-gray-100 flex justify-center items-center h-screen">
 <div class="text-center">
     <h1 class="text-6xl font-bold mb-8">Reglito</h1>
-    <form class="max-w-md mx-auto" hx-post="initialize">
+    <form class="max-w-md mx-auto" hx-post="initialize" hx-trigger="submit" hx-vals="name matricule">
         <div class="mb-4">
             <label for="name" class="block text-gray-700">Nombre de la cooperativa:</label>
-            <input type="text" id="name" name="name" class="form-input mt-1 block w-full pl-1" placeholder="Nombre">
+            <input type="text" id="name" name="name" class="form-input mt-1 block w-full pl-1" placeholder="Nombre" required>
+            <div class="text-red-500 hidden" hx-target="#nameError" hx-swap="innerHTML">Missing name</div>
         </div>
         <div class="mb-8">
             <label for="matricule" class="block text-gray-700">Numero de matricula:</label>
-            <input type="text" id="matricule" name="matricule" class="form-input mt-1 block w-full pl-1" placeholder="Matricula">
+            <input type="text" id="matricule" name="matricule" class="form-input mt-1 block w-full pl-1" placeholder="Matricula" required>
         </div>
+        <div id="nameError"></div> 
         <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" type="submit">Submit</button>
     </form>
 </div>
