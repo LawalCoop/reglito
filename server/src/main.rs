@@ -4,25 +4,18 @@ use entity::internal_rules::Entity as InternalRules;
 use handlers::initialize_internal_rules;
 use migration::{Migrator, MigratorTrait};
 use sea_orm::EntityTrait;
-use serde::Deserialize;
 
 #[derive(Template)]
 #[template(path = "index.html")]
 struct HelloTemplate {}
 
 use axum::{
-    http::{Response, StatusCode},
+    http::StatusCode,
     response::{Html, IntoResponse},
     routing::{get, post},
     Router,
 };
 use tower_livereload::LiveReloadLayer;
-
-#[derive(Debug, Deserialize)]
-struct FormData {
-    name: String,
-    matricule: String,
-}
 
 async fn hello() -> impl IntoResponse {
     let template = HelloTemplate {};
