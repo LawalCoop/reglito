@@ -9,18 +9,22 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(InternalRules::Table)
+                    .table(InternalRulesChapterOptions::Table)
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(InternalRules::Id)
+                        ColumnDef::new(InternalRulesChapterOptions::Id)
                             .integer()
                             .not_null()
                             .auto_increment()
                             .primary_key(),
                     )
-                    .col(ColumnDef::new(InternalRules::Name).string().not_null())
                     .col(
-                        ColumnDef::new(InternalRules::Description)
+                        ColumnDef::new(InternalRulesChapterOptions::Name)
+                            .string()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(InternalRulesChapterOptions::Description)
                             .string()
                             .not_null(),
                     )
@@ -31,13 +35,17 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(InternalRules::Table).to_owned())
+            .drop_table(
+                Table::drop()
+                    .table(InternalRulesChapterOptions::Table)
+                    .to_owned(),
+            )
             .await
     }
 }
 
 #[derive(DeriveIden)]
-enum InternalRules {
+enum InternalRulesChapterOptions {
     Table,
     Id,
     Name,

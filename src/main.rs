@@ -1,7 +1,9 @@
 use askama::Template;
 mod handlers;
+use entity::internal_rules::Entity as InternalRules;
 use handlers::initialize_internal_rules;
 use migration::{Migrator, MigratorTrait};
+use sea_orm::EntityTrait;
 use serde::Deserialize;
 
 #[derive(Template)]
@@ -38,6 +40,9 @@ async fn hello() -> impl IntoResponse {
 async fn main() {
     let connection = sea_orm::Database::connect("sqlite::memory:").await.unwrap();
     Migrator::up(&connection, None).await.unwrap();
+    let results = InternalRules::find().all(&connection).await;
+
+    print!("RESULTS {:#?}", results);
 
     let app = Router::new()
         .route("/", get(hello))

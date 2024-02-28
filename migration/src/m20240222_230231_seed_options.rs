@@ -1,4 +1,8 @@
-use sea_orm_migration::prelude::*;
+use entity::internal_rules;
+use sea_orm_migration::{
+    prelude::*,
+    sea_orm::{ActiveModelTrait, Set},
+};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -6,36 +10,20 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        manager
-            .create_table(
-                Table::create()
-                    .table(Post::Table)
-                    .if_not_exists()
-                    .col(
-                        ColumnDef::new(Post::Id)
-                            .integer()
-                            .not_null()
-                            .auto_increment()
-                            .primary_key(),
-                    )
-                    .col(ColumnDef::new(Post::Title).string().not_null())
-                    .col(ColumnDef::new(Post::Text).string().not_null())
-                    .to_owned(),
-            )
-            .await
+        let db = manager.get_connection();
+
+        internal_rules::ActiveModel {
+            name: Set("internal rule name".to_owned()),
+            description: Set("internal rule description".to_owned()),
+            ..Default::default()
+        }
+        .insert(db)
+        .await?;
+
+        Ok(())
     }
 
-    async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        manager
-            .drop_table(Table::drop().table(Post::Table).to_owned())
-            .await
+    async fn down(&self, _manager: &SchemaManager) -> Result<(), DbErr> {
+        todo!("")
     }
-}
-
-#[derive(DeriveIden)]
-enum Post {
-    Table,
-    Id,
-    Title,
-    Text,
 }
