@@ -1,24 +1,37 @@
 use askama::Template;
 mod handlers;
-use entity::internal_rules::Entity as InternalRules;
-use handlers::initialize_internal_rules;
-use migration::{Migrator, MigratorTrait};
-use sea_orm::EntityTrait;
-
-#[derive(Template)]
-#[template(path = "index.html")]
-struct HelloTemplate {}
-
 use axum::{
     http::StatusCode,
     response::{Html, IntoResponse},
     routing::{get, post},
     Router,
 };
+use entity::internal_rules::Entity as InternalRules;
+use handlers::initialize_internal_rules;
+use migration::{Migrator, MigratorTrait};
+use sea_orm::EntityTrait;
+use serde::{Deserialize, Serialize};
 use tower_livereload::LiveReloadLayer;
 
+#[derive(Serialize, Deserialize)]
+struct Chapter {
+    pub title: String,
+    pub options: Option<Vec<Chapter>>,
+}
+
+#[derive(Template, Serialize, Deserialize)]
+#[template(path = "index.html")]
+struct HelloTemplate {
+    pub chapters: Vec<Chapter>,
+}
+
 async fn hello() -> impl IntoResponse {
-    let template = HelloTemplate {};
+    let template = HelloTemplate {
+        chapters: vec![Chapter {
+            title: "Capitulo 1".to_string(),
+            options: None,
+        }],
+    };
     match template.render() {
         Ok(html) => Html(html).into_response(),
         Err(err) => (

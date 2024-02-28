@@ -8,24 +8,49 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- htmx library -->
     <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+    <!-- Alpine.Js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="bg-gray-100 flex justify-center items-center h-screen">
-<div class="text-center">
-    <h1 class="text-6xl font-bold mb-8">Reglito</h1>
-    <form class="max-w-md mx-auto" hx-post="initialize" hx-trigger="submit" hx-vals="name matricule">
-        <div class="mb-4">
-            <label for="name" class="block text-gray-700">Nombre de la cooperativa:</label>
-            <input type="text" id="name" name="name" class="form-input mt-1 block w-full pl-1" placeholder="Nombre" required>
-            <div class="text-red-500 hidden" hx-target="#nameError" hx-swap="innerHTML">Missing name</div>
+<body class="bg-gray-100 flex justify-center items-center h-screen w-screen">
+    <div class="flex flex-col w-full">
+        <div class="text-center">
+            <h1 class="text-6xl font-bold mb-8">Reglito</h1>
+            <form class="max-w-md mx-auto" hx-post="initialize" hx-trigger="submit" hx-vals="name matricule">
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-700">Nombre de la cooperativa:</label>
+                    <input type="text" id="name" name="name" class="form-input mt-1 block w-full pl-1" placeholder="Nombre" required>
+                    <div class="text-red-500 hidden" hx-target="#nameError" hx-swap="innerHTML">Missing name</div>
+                </div>
+                <div class="mb-8">
+                    <label for="matricule" class="block text-gray-700">Numero de matricula:</label>
+                    <input type="number" id="matricule" name="matricule" class="form-input mt-1 block w-full pl-1" placeholder="Matricula" required>
+                </div>
+                <div id="nameError"></div> 
+                <button id="submitButton" class="px-4 py-2 rounded transition-colors disabled:cursor-not-allowed disabled:text-gray-600" type="submit" disabled>Submit</button>
+            </form>
         </div>
-        <div class="mb-8">
-            <label for="matricule" class="block text-gray-700">Numero de matricula:</label>
-            <input type="number" id="matricule" name="matricule" class="form-input mt-1 block w-full pl-1" placeholder="Matricula" required>
+
+        <!-- DISPLAY OPTIONS -->
+        
+        <div id="container" class="flex justify-center items-center bg-gray-200 mx-80 h-80 mt-20 rounded-lg">
+            <div x-data="{ open: false }">
+
+                {% for chapter in chapters %}
+                    <p>{{chapter.title}}</p>
+                {% endfor %}
+
+                <button @click="open = ! open">Capitulo 2</button>
+                <div class="ml-5" x-show="open" @click.outside="open = false">
+                    <div class="ml-5" x-data="{ open: false }">
+                        <button @click="open = ! open">Capitulo 3</button>
+                     
+                        <div class="ml-5" x-show="open" @click.outside="open = false">Articulo 1</div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="nameError"></div> 
-        <button id="submitButton" class="px-4 py-2 rounded transition-colors disabled:cursor-not-allowed disabled:text-gray-600" type="submit" disabled>Submit</button>
-    </form>
-</div>
+        <!-- DISPLAY OPTIONS -->
+    </div>
 <script>
     const nameInput = document.getElementById('name');
     const matriculeInput = document.getElementById('matricule');
