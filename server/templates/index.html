@@ -30,25 +30,47 @@
             </form>
         </div>
 
+         <!--{% for chapter in chapters %}
+            <div>
+                <button>{{chapter.title}}</button>
+            </div>
+        {% endfor %}-->
+
         <!-- DISPLAY OPTIONS -->
         
-        <div id="container" class="flex justify-center items-center bg-gray-200 mx-80 h-80 mt-20 rounded-lg">
+        <div id="container" class="flex flex-col justify-center items-center mx-96 py-20 mt-20">
             <div x-data="{ open: false }">
-
-                {% for chapter in chapters %}
-                    <p>{{chapter.title}}</p>
-                {% endfor %}
-
-                <button @click="open = ! open">Capitulo 2</button>
-                <div class="ml-5" x-show="open" @click.outside="open = false">
-                    <div class="ml-5" x-data="{ open: false }">
-                        <button @click="open = ! open">Capitulo 3</button>
-                     
-                        <div class="ml-5" x-show="open" @click.outside="open = false">Articulo 1</div>
+                <button @click="open = ! open" class="flex">
+                    <div class="flex gap-28">
+                        <p :class="open ? 'font-bold' : ''">Capitulo 2</p>
+                        
+                        <svg :class="open ? '' : 'hidden'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                        
+                        
+                        <svg :class="open ? 'hidden' : ''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                        </svg>
                     </div>
+                    
+                </button>
+
+                <!-- CONTENT -->
+                <div 
+                    x-show="open" 
+                    x-data="{ clicked: false }" 
+                    @click="clicked = ! clicked" 
+                    :class="clicked ? 'bg-gray-200' : ''">
+                    
+                    <p class="ml-5" :class="clicked ? 'font-bold' : ''">
+                        Articulo 1
+                    </p>
                 </div>
             </div>
         </div>
+
         <!-- DISPLAY OPTIONS -->
     </div>
 <script>
