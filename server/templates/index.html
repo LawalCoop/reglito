@@ -8,8 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- htmx library -->
     <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
-    <!-- Alpine.Js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-gray-100 flex justify-center items-center h-screen w-screen">
     <div class="flex flex-col w-full">
@@ -29,49 +27,6 @@
                 <button id="submitButton" class="px-4 py-2 rounded transition-colors disabled:cursor-not-allowed disabled:text-gray-600" type="submit" disabled>Submit</button>
             </form>
         </div>
-
-         <!--{% for chapter in chapters %}
-            <div>
-                <button>{{chapter.title}}</button>
-            </div>
-        {% endfor %}-->
-
-        <!-- DISPLAY OPTIONS -->
-        
-        <div id="container" class="flex flex-col justify-center items-center mx-96 py-20 mt-20">
-            <div x-data="{ open: false }">
-                <button @click="open = ! open" class="flex">
-                    <div class="flex gap-28">
-                        <p :class="open ? 'font-bold' : ''">Capitulo 2</p>
-                        
-                        <svg :class="open ? '' : 'hidden'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                        </svg>
-                        
-                        
-                        <svg :class="open ? 'hidden' : ''" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                        </svg>
-                    </div>
-                    
-                </button>
-
-                <!-- CONTENT -->
-                <div 
-                    x-show="open" 
-                    x-data="{ clicked: false }" 
-                    @click="clicked = ! clicked" 
-                    :class="clicked ? 'bg-gray-200' : ''">
-                    
-                    <p class="ml-5" :class="clicked ? 'font-bold' : ''">
-                        Articulo 1
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- DISPLAY OPTIONS -->
     </div>
 <script>
     const nameInput = document.getElementById('name');
