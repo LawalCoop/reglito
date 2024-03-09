@@ -14,57 +14,69 @@
 <body class="flex w-screen h-screen bg-gray-100">
     <div class="flex grow pt-5 bg-white shadow-md">
         <div class="flex flex-col">
-            <div x-data="{ open: false }">
-                <button class="flex" @click="open = ! open">
-                    <div class="flex gap-28 my-2 mx-5">
-                        <p :class="open ? 'font-bold' : ''" class="w-full">Capitulo 2</p>
+            {% for chapter in chapters %}
+                <div x-data="{ open: false }">
+                    <button class="flex" @click="open = ! open">
+                        <div class="flex gap-28 my-2 mx-5">
+                            <p :class="open ? 'font-bold' : ''" class="w-full">{{ chapter.title }}</p>
+                            
+                            <svg class="w-10" x-show="open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                            
+                            
+                            <svg class="w-10" x-show="!open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                            </svg>
+                        </div>
                         
-                        <svg class="w-10" x-show="open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                        </svg>
-                        
-                        
-                        <svg class="w-10" x-show="!open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                        </svg>
-                    </div>
-                    
-                </button>
+                    </button>
 
-                <!-- CONTENT -->
-                <div 
-                    x-show="open" 
-                    x-data="{ clicked: false }" 
-                    class="border-l-4 border-gray-100"
-                    @click="clicked = ! clicked" 
-                    :class="clicked ? 'bg-gray-200 border-l-4 border-blue-700' : ''">
-                    
-                    <p class="ml-5 py-2" :class="clicked ? 'font-bold' : ''">
-                        Articulo 1
-                    </p>
+                    <!-- CONTENT -->
+                    {% match chapter.options %}
+
+                        {% when None %}
+
+                        {% when Some with (options) %}
+
+                            {% for option in options %}
+                                <div 
+                                    x-show="open" 
+                                    x-data="{ clicked: false }" 
+                                    class="border-l-4 border-gray-100"
+                                    @click="clicked = ! clicked" 
+                                    :class="clicked ? 'bg-gray-200 border-l-4 border-blue-700' : ''">
+                                    
+                                    <p class="ml-5 py-2" :class="clicked ? 'font-bold' : ''">
+                                        {{option.title}}
+                                    </p>
+                                </div>
+                            {% endfor %}
+
+                    {% endmatch %}
+                    <!-- CONTENT -->
                 </div>
-                <!-- CONTENT -->
-            </div>
+            {% endfor %}
         </div>
     </div>
 
-    <div class="flex flex-col justify-center items-center w-full h-full px-32">
-        <div class="h-32 flex flex-col">
+    <div class="flex flex-col justify-between items-center w-full h-full px-32">
+        <div class="h-32 flex flex-col mt-10">
             <h1 class="text-6xl font-bold">Reglito</h1>
         </div>
 
-        <div class="h-10 w-full pl-10 flex flex-col">
-            <h1 class="text-xl font-bold">NOMBRE DEL CAPITULO</h1>
+        <div class="flex h-auto w-full pl-10">
+            <h1 class="pt-20 text-xl font-bold">NOMBRE DEL CAPITULO</h1>
         </div>
         
         <div class="flex justify-center items-center bg-white w-full h-96 rounded-xl shadow-xl">
-            CAPITULO
+            <h1>CAPITULO</h1>
         </div>
 
-        <div class="flex flex-row-reverse w-full mt-5 gap-2">
+        <div class="flex flex-row-reverse w-full mt-5 gap-2 mb-44">
             <button class="flex gap-2 text-white rounded-lg p-2 bg-green-500 hover:bg-green-700 shadow-lg">
                 Elegir Capitulo
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
