@@ -1,35 +1,22 @@
 mod handlers;
+
+use crate::handlers::{index, initialize_internal_rules, select_chapters};
 use axum::{
     routing::{get, post},
     Router,
 };
-
-use handlers::{index, initialize_internal_rules, select_chapters};
-use tower_livereload::LiveReloadLayer;
-
-/*
---- DATABASE EXAMPLE IMPORTS ---
-
-use entity::internal_rules::Entity as InternalRules;
+use entity::chapter::Entity as Chapter;
 use migration::{Migrator, MigratorTrait};
 use sea_orm::EntityTrait;
-
---- DATABASE EXAMPLE IMPORTS ---
-*/
+use tower_livereload::LiveReloadLayer;
 
 #[tokio::main]
 async fn main() {
-    /*
-    --- USE DATABASE EXAMPLE ----
-
     let connection = sea_orm::Database::connect("sqlite::memory:").await.unwrap();
     Migrator::up(&connection, None).await.unwrap();
-    let results = InternalRules::find().all(&connection).await;
+    let results = Chapter::find().all(&connection).await;
 
     print!("RESULTS {:#?}", results);
-
-    --- USE DATABASE EXAMPLE ----
-     */
 
     let app = Router::new()
         .route("/", get(index::handler))

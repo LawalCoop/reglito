@@ -1,1 +1,1 @@
-pub mod internal_rules;
+pub mod chapter;

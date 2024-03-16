@@ -835,6 +835,7 @@ version = "0.1.0"
 dependencies = [
  "sea-orm",
  "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -1534,6 +1535,7 @@ dependencies = [
  "async-std",
  "entity",
  "sea-orm-migration",
+ "serde_json",
 ]
 
 [[package]]
