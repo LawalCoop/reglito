@@ -10,7 +10,7 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        let sections = vec![
+        let sections_for_coop = vec![
             Section {
                 description: "¿Bajo qué principios desarrollarán sus actividades?".to_string(),
                 options: vec![
@@ -32,13 +32,35 @@ impl MigrationTrait for Migration {
             }
         ];
 
-        let sections: Sections = Sections(sections);
+        let sections_for_coop: Sections = Sections(sections_for_coop);
 
         let db = manager.get_connection();
 
         chapter::ActiveModel {
             name: Set("Cooperativa".to_owned()),
-            sections: Set(sections),
+            sections: Set(sections_for_coop),
+            ..Default::default()
+        }
+        .insert(db)
+        .await?;
+
+        let sections_for_services = vec![
+            Section {
+                description: "Áreas que tendrá la cooperativa".to_string(),
+                options: vec![
+                    "Administración".to_string(), 
+                    "Producción".to_string(), 
+                    "Control de Calidad".to_string(),
+                ],
+                output: "{{CHAPTER}}: La cooperativa se distribuirá en las siguientes áreas, {{OPTION_SELECTED}}".to_string()
+            }
+        ];
+
+        let sections_for_services: Sections = Sections(sections_for_services);
+
+        chapter::ActiveModel {
+            name: Set("Prestación del servicio".to_owned()),
+            sections: Set(sections_for_services),
             ..Default::default()
         }
         .insert(db)

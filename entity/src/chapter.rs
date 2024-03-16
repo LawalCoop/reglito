@@ -12,6 +12,8 @@ pub struct Model {
     pub sections: Sections,
 }
 
+// NOTE: investigar si hay una forma de poder usar Vec<Section> en el model  porque
+// con esta implementacion luego para acceder tenemos que hacer chapter.sections.0
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, FromJsonQueryResult)]
 pub struct Sections(pub Vec<Section>);
 
