@@ -5,19 +5,10 @@ use axum::{
     routing::{get, post},
     Router,
 };
-use entity::chapter::Entity as Chapter;
-use migration::{Migrator, MigratorTrait};
-use sea_orm::EntityTrait;
 use tower_livereload::LiveReloadLayer;
 
 #[tokio::main]
 async fn main() {
-    let connection = sea_orm::Database::connect("sqlite::memory:").await.unwrap();
-    Migrator::up(&connection, None).await.unwrap();
-    let results = Chapter::find().all(&connection).await;
-
-    print!("RESULTS {:#?}", results);
-
     let app = Router::new()
         .route("/", get(index::handler))
         .route("/select_chapters", get(select_chapters::handler))
