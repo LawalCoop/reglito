@@ -7,14 +7,25 @@ use std::{convert::Infallible, fs::File, io::Read};
 use docx_rs::*;
 
 pub async fn handler() -> Result<impl IntoResponse, Infallible> {
-    let path = std::path::Path::new("./hello.docx");
+    let path = std::path::Path::new("./reglamento_interno.docx");
     let mut file = match File::create(path) {
         Ok(file) => file,
         Err(_) => return Ok(Response::new(Body::empty())),
     };
+    let header =
+        Paragraph::new().add_run(Run::new().add_text("Reglamento interno"));
+
+    let first_header =
+        Paragraph::new().add_run(Run::new().add_text("Sobre la cooperativa"));
+    
+    let chapter_paragraph=
+        Paragraph::new().add_run(Run::new().add_text("Algo sobre la cooperativa"));
+
 
     if let Err(_) = Docx::new()
-        .add_paragraph(Paragraph::new().add_run(Run::new().add_text("Hello")))
+        .add_paragraph(header)
+        .add_paragraph(first_header)
+        .add_paragraph(chapter_paragraph)
         .build()
         .pack(&mut file)
     {
