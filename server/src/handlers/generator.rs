@@ -22,15 +22,16 @@ pub async fn handler() -> Result<impl IntoResponse, Infallible> {
         Paragraph::new().add_run(Run::new().add_text("Algo sobre la cooperativa"));
 
 
-    if let Err(_) = Docx::new()
+    let new_document_result = Docx::new()
         .add_paragraph(header)
         .add_paragraph(first_header)
         .add_paragraph(chapter_paragraph)
         .build()
-        .pack(&mut file)
-    {
-        return Ok(Response::new(Body::empty()));
-    };
+        .pack(&mut file);
+
+    if new_document_result.is_err() {
+         return Err(GenerateDocumentError); 
+    }
 
     let mut file = match File::open(path) {
         Ok(file) => file,
