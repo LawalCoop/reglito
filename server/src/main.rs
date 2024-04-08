@@ -12,7 +12,7 @@ async fn main() {
     let app = Router::new()
         .route("/", get(index::handler))
         .route("/select_chapters", get(select_chapters::handler))
-        .route("/generate_text", get(generator::handler))
+        .route("/generate_document", get(generator::handler))
         .route("/initialize", post(initialize_internal_rules::handler))
         .layer(LiveReloadLayer::new());
 

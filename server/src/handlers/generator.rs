@@ -1,10 +1,10 @@
 use axum::{
-    response::{IntoResponse, Response},
-    http::header::HeaderValue,
     body::Body,
+    http::header::HeaderValue,
+    response::{IntoResponse, Response},
 };
-use std::{convert::Infallible, fs::File, io::Read};
 use docx_rs::*;
+use std::{convert::Infallible, fs::File, io::Read};
 
 pub async fn handler() -> Result<impl IntoResponse, Infallible> {
     let path = std::path::Path::new("./reglamento_interno.docx");
@@ -12,15 +12,12 @@ pub async fn handler() -> Result<impl IntoResponse, Infallible> {
         Ok(file) => file,
         Err(_) => return Ok(Response::new(Body::empty())),
     };
-    let header =
-        Paragraph::new().add_run(Run::new().add_text("Reglamento interno"));
+    let header = Paragraph::new().add_run(Run::new().add_text("Reglamento interno"));
 
-    let first_header =
-        Paragraph::new().add_run(Run::new().add_text("Sobre la cooperativa"));
-    
-    let chapter_paragraph=
+    let first_header = Paragraph::new().add_run(Run::new().add_text("Sobre la cooperativa"));
+
+    let chapter_paragraph =
         Paragraph::new().add_run(Run::new().add_text("Algo sobre la cooperativa"));
-
 
     let new_document_result = Docx::new()
         .add_paragraph(header)
@@ -30,7 +27,7 @@ pub async fn handler() -> Result<impl IntoResponse, Infallible> {
         .pack(&mut file);
 
     if new_document_result.is_err() {
-         return Err(GenerateDocumentError); 
+        return Ok(Response::new(Body::empty()));
     }
 
     let mut file = match File::open(path) {
@@ -38,14 +35,17 @@ pub async fn handler() -> Result<impl IntoResponse, Infallible> {
         Err(_) => return Ok(Response::new(Body::empty())),
     };
     let mut contents = Vec::new();
-    if let Err(_) = file.read_to_end(&mut contents) {
+    let file = file.read_to_end(&mut contents);
+    if file.is_err() {
         return Ok(Response::new(Body::empty()));
     }
 
     let mut response = Response::new(Body::from(contents));
     response.headers_mut().insert(
         axum::http::header::CONTENT_TYPE,
-        HeaderValue::from_static("application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+        HeaderValue::from_static(
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ),
     );
 
     Ok(response)
