@@ -1,9 +1,14 @@
 defmodule Reglito.Chapters.Chapter do
   use Ecto.Schema
+
   import Ecto.Changeset
+
+  alias Reglito.Chapters.Section
 
   schema "chapters" do
     field :name, :string
+
+    embeds_many :sections, Section
 
     timestamps(type: :utc_datetime)
   end
