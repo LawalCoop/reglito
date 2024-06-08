@@ -1,19 +1,22 @@
-defmodule Reglito.Chapters.Chapter do
+defmodule Reglito.Sections.Section do
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  alias Reglito.Sections.Section
+  alias Reglito.Chapters.Chapter
+  alias Reglito.Options.Option
 
-  schema "chapters" do
+  schema "sections" do
     field :name, :string
-    has_many :sections, Section
+
+    belongs_to :chapter, Chapter
+    has_many :options, Option
 
     timestamps(type: :utc_datetime)
   end
 
   def changeset(chapter, attrs) do
-    # TODO: cast sections
+    # TODO: cast options
 
     chapter
     |> cast(attrs, [:name])
