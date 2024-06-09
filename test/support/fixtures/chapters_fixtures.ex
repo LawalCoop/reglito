@@ -4,17 +4,17 @@ defmodule Reglito.ChaptersFixtures do
   entities via the `Reglito.Chapters` context.
   """
 
-  @doc """
-  Generate a chapter.
-  """
-  def chapter_fixture(attrs \\ %{}) do
-    {:ok, chapter} =
-      attrs
-      |> Enum.into(%{
-        name: "some name"
-      })
-      |> Reglito.Chapters.create_chapter()
+  # @doc """
+  # Generate a chapter.
+  # """
+  # def chapter_fixture(attrs \\ %{}) do
+  #   {:ok, chapter} =
+  #     attrs
+  #     |> Enum.into(%{
+  #       name: "some name"
+  #     })
+  #     |> Reglito.Chapters.create_chapter()
 
-    chapter
-  end
+  #   chapter
+  # end
 end
