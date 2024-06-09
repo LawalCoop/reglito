@@ -1,6 +1,15 @@
 <.flash_group flash={@flash} />
 
-<div class="flex justify-center items-center h-screen mx-auto gap-2">
-  <h1 class="text-5xl font-extrabold drop-shadow-xl">Reglito</h1>
-  <img class="h-11" src={~p"/images/pencil.gif"} alt="pencil" />
+<div class="flex justify-center items-center h-screen mx-auto">
+  <div class="button w-auto h-auto bg-blue-500  cursor-pointer select-none
+    active:translate-y-2  active:[box-shadow:0_0px_0_0_#1b6ff8,0_0px_0_0_#1b70f841]
+    active:border-b-[0px]
+    transition-all duration-150 [box-shadow:0_10px_0_0_#1b6ff8,0_15px_0_0_#1b70f841]
+    rounded-3xl  border-[1px] border-blue-400
+  ">
+    <span class="flex justify-center items-center gap-2 py-4 px-10 h-full text-white font-bold text-lg ">
+      <img class="h-11" src={~p"/images/pencil.gif"} alt="pencil" />
+      <h1 class="text-5xl font-extrabold drop-shadow-xl">Reglito</h1>
+    </span>
+  </div>
 </div>

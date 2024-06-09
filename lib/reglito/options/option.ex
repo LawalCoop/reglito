@@ -19,6 +19,6 @@ defmodule Reglito.Options.Option do
 
     chapter
     |> cast(attrs, [:description])
-    |> validate_required([:name])
+    |> validate_required([:description])
   end
 end
