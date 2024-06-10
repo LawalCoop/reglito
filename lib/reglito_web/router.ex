@@ -17,6 +17,10 @@ defmodule ReglitoWeb.Router do
   scope "/", ReglitoWeb do
     pipe_through :browser
 
+    live_session :default do
+      live "/chapters", ChaptersLive
+    end
+
     get "/", PageController, :home
   end
 
