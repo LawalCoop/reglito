@@ -6,6 +6,7 @@ defmodule ReglitoWeb.ChaptersLive do
       name: "Comida",
       sections: [
         %{
+          id: 1,
           name: "¿Comemos?",
           options: [
             "Si",
@@ -13,6 +14,7 @@ defmodule ReglitoWeb.ChaptersLive do
           ]
         },
         %{
+          id: 2,
           name: "¿Que comemos?",
           options: [
             "Asado",
@@ -25,6 +27,7 @@ defmodule ReglitoWeb.ChaptersLive do
       name: "Trabajo",
       sections: [
         %{
+          id: 3,
           name: "¿Trabajamos?",
           options: [
             "Si",
@@ -32,6 +35,7 @@ defmodule ReglitoWeb.ChaptersLive do
           ]
         },
         %{
+          id: 4,
           name: "¿De que trabajamos?",
           options: [
             "Programación",
@@ -57,33 +61,44 @@ defmodule ReglitoWeb.ChaptersLive do
         </button>
       </div>
 
-      <div class="bg-black rounded-xl my-2 px-5 py-2 text-white">
-        <%= for section <- @selected_chapter.sections do %>
-          <div class="flex justify-between items-center my-2">
+      <%= for section <- @selected_chapter.sections do %>
+        <div class="bg-black rounded-xl my-2 px-5 py-2 text-white">
+          <div
+            class="flex justify-between items-center my-2 cursor-pointer	"
+            phx-click="open_section"
+            phx-value-section-id={section.id}
+          >
             <div class="flex items-center">
               <div class="bg-white text-gray-400 rounded-full p-0.5">
                 <.icon name="hero-check" />
               </div>
               <p class="pl-5"><%= section.name %></p>
             </div>
-            <.icon name="hero-chevron-down" />
+            <%= if Map.get(@section_is_open_by_id, section.id, false) do %>
+              <.icon name="hero-chevron-up" />
+            <% else %>
+              <.icon name="hero-chevron-down" />
+            <% end %>
           </div>
-          <%= for option <- section.options do %>
-            <div class="flex flex-col gap-2 items-center my-3">
-              <div class="flex bg-white w-full text-black rounded-xl pr-5 py-2">
-                <div class="mx-2">
-                  <div class="bg-gray-200 rounded-full text-gray-400">
-                    <.icon name="hero-check" />
+
+          <%= if Map.get(@section_is_open_by_id, section.id, false) do %>
+            <%= for option <- section.options do %>
+              <div class="flex flex-col gap-2 items-center my-3">
+                <div class="flex bg-white w-full text-black rounded-xl pr-5 py-2">
+                  <div class="mx-2">
+                    <div class="bg-gray-200 rounded-full text-gray-400">
+                      <.icon name="hero-check" />
+                    </div>
                   </div>
+                  <p>
+                    <%= option %>
+                  </p>
                 </div>
-                <p>
-                  <%= option %>
-                </p>
               </div>
-            </div>
+            <% end %>
           <% end %>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
     """
   end
@@ -94,6 +109,7 @@ defmodule ReglitoWeb.ChaptersLive do
 
     socket =
       socket
+      |> assign(:section_is_open_by_id, %{})
       |> assign(:selected_chapter_index, selected_chapter_index)
       |> assign(:selected_chapter, selected_chapter)
 
@@ -138,5 +154,23 @@ defmodule ReglitoWeb.ChaptersLive do
       |> assign(:selected_chapter, Enum.at(@data, new_selected_chapter_index))
 
     {:noreply, socket}
+  end
+
+  def handle_event("open_section", %{"section-id" => section_id}, socket) do
+    section_id = String.to_integer(section_id)
+    section_is_open_by_id = socket.assigns.section_is_open_by_id
+    is_selected = not Map.get(section_is_open_by_id, section_id, false)
+
+    section_is_open_by_id =
+      Map.merge(section_is_open_by_id, %{section_id => is_selected})
+
+    IO.inspect(section_is_open_by_id)
+
+    {:noreply,
+     assign(
+       socket,
+       :section_is_open_by_id,
+       section_is_open_by_id
+     )}
   end
 end
