@@ -3,13 +3,11 @@ defmodule Reglito.Chapters.Chapter do
 
   import Ecto.Changeset
 
-  alias Reglito.InternalRegulations.InternalRegulation
   alias Reglito.Sections.Section
 
   schema "chapters" do
     field :name, :string
 
-    belongs_to :internal_regulation, InternalRegulation
     has_many :sections, Section
 
     timestamps(type: :utc_datetime)

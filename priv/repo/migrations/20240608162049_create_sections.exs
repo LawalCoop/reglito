@@ -4,6 +4,7 @@ defmodule Reglito.Repo.Migrations.CreateSections do
   def change do
     create table(:sections) do
       add :name, :string
+      add :can_select_many, :boolean
 
       add :chapter_id, references(:chapters)
 
