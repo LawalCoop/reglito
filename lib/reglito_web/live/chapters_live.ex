@@ -61,17 +61,14 @@ defmodule ReglitoWeb.ChaptersLive do
         </button>
       </div>
 
-      <%= for section <- @selected_chapter.sections do %>
+      <%= for {section, section_index} <- @selected_chapter.sections do %>
         <div class="bg-black rounded-xl my-2 px-5 py-2 text-white">
           <div
-            class="flex justify-between items-center my-2 cursor-pointer	"
+            class="flex justify-between items-center my-2 cursor-pointer"
             phx-click="open_section"
             phx-value-section-id={section.id}
           >
             <div class="flex items-center">
-              <div class="bg-white text-gray-400 rounded-full p-0.5">
-                <.icon name="hero-check" />
-              </div>
               <p class="pl-5"><%= section.name %></p>
             </div>
             <%= if Map.get(@section_is_open_by_id, section.id, false) do %>
@@ -82,11 +79,16 @@ defmodule ReglitoWeb.ChaptersLive do
           </div>
 
           <%= if Map.get(@section_is_open_by_id, section.id, false) do %>
-            <%= for option <- section.options do %>
+            <%= for {option, index, is_selected} <- section.options do %>
               <div class="flex flex-col gap-2 items-center my-3">
-                <div class="flex bg-white w-full text-black rounded-xl pr-5 py-2">
+                <div
+                  class="flex bg-white w-full text-black rounded-xl pr-5 py-2 cursor-pointer"
+                  phx-click="option_selected"
+                  phx-value-option-index={index}
+                  phx-value-section-index={section_index}
+                >
                   <div class="mx-2">
-                    <div class="bg-gray-200 rounded-full text-gray-400">
+                    <div class={" #{if is_selected do "bg-green-600" else"bg-gray-200"end} rounded-full #{if is_selected do "text-white" else"text-gray-400"end}"}>
                       <.icon name="hero-check" />
                     </div>
                   </div>
@@ -105,13 +107,27 @@ defmodule ReglitoWeb.ChaptersLive do
 
   def mount(_params, _session, socket) do
     selected_chapter_index = 0
-    selected_chapter = Enum.at(@data, selected_chapter_index)
+
+    selected_chapter =
+      @data
+      |> Enum.at(selected_chapter_index)
+      |> Map.update!(:sections, fn sections ->
+        Enum.map(sections, fn section ->
+          Map.update!(section, :options, fn options ->
+            options
+            |> Enum.with_index()
+            |> Enum.map(fn {option, index} -> {option, index, false} end)
+          end)
+        end)
+        |> Enum.with_index()
+      end)
 
     socket =
       socket
       |> assign(:section_is_open_by_id, %{})
       |> assign(:selected_chapter_index, selected_chapter_index)
       |> assign(:selected_chapter, selected_chapter)
+      |> assign(:selected_options_by_section_id, %{})
 
     {:ok, socket}
   end
@@ -128,10 +144,26 @@ defmodule ReglitoWeb.ChaptersLive do
         new_selected_chapter_index
       end
 
+    a =
+      @data
+      |> Enum.at(new_selected_chapter_index)
+      |> Map.update!(:sections, fn sections ->
+        Enum.map(sections, fn section ->
+          Map.update!(section, :options, fn options ->
+            options
+            |> Enum.with_index()
+            |> Enum.map(fn {option, index} -> {option, index, false} end)
+          end)
+        end)
+        |> Enum.with_index()
+      end)
+
+    IO.inspect(a, label: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
     socket =
       socket
       |> assign(:selected_chapter_index, new_selected_chapter_index)
-      |> assign(:selected_chapter, Enum.at(@data, new_selected_chapter_index))
+      |> assign(:selected_chapter, a)
 
     {:noreply, socket}
   end
@@ -172,5 +204,43 @@ defmodule ReglitoWeb.ChaptersLive do
        :section_is_open_by_id,
        section_is_open_by_id
      )}
+  end
+
+  def handle_event(
+        "option_selected",
+        %{
+          "option-index" => option_index,
+          "section-index" => section_index
+        },
+        socket
+      ) do
+    section_index = String.to_integer(section_index)
+    option_index = String.to_integer(option_index)
+    selected_chapter = socket.assigns.selected_chapter
+
+    sections = selected_chapter.sections
+    {section, s_i} = Enum.at(sections, section_index)
+
+    options = section.options
+    {option, o_i, is_selected} = Enum.at(options, option_index)
+
+    new_options = List.replace_at(options, option_index, {option, o_i, !is_selected})
+
+    new_sections =
+      List.replace_at(
+        sections,
+        section_index,
+        {Map.update!(section, :options, fn _ -> new_options end), s_i}
+      )
+
+    selected_chapter = Map.update!(selected_chapter, :sections, fn _ -> new_sections end)
+
+    IO.inspect(selected_chapter, label: "selected_chapter")
+
+    socket =
+      socket
+      |> assign(:selected_chapter, selected_chapter)
+
+    {:noreply, socket}
   end
 end
