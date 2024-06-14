@@ -8,6 +8,7 @@ defmodule Reglito.Sections.Section do
 
   schema "sections" do
     field :name, :string
+    field :can_select_many, :boolean
 
     belongs_to :chapter, Chapter
     has_many :options, Option
