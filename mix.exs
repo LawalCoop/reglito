@@ -58,7 +58,8 @@ defmodule Reglito.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
-      {:credo, "~> 1.7", runtime: false, only: :dev}
+      {:credo, "~> 1.7", runtime: false, only: :dev},
+      {:sobelow, "~> 0.8", only: :dev}
     ]
   end
 
