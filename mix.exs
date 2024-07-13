@@ -9,7 +9,12 @@ defmodule Reglito.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      dialyzer: [
+        plt_file: {:no_warn, "priv/plts/project.plt"},
+        plt_core_path: "priv/plts/core.plt",
+        plt_add_apps: [:mix]
+      ]
     ]
   end
 
@@ -57,7 +62,10 @@ defmodule Reglito.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.2"}
+      {:bandit, "~> 1.2"},
+      {:credo, "~> 1.7", runtime: false, only: :dev},
+      {:sobelow, "~> 0.8", only: :dev},
+      {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
     ]
   end
 
