@@ -1,6 +1,6 @@
 [
   {
-    "chapterTitle": "CAPÍTULO DE LA COOPERATIVA",
+    "chapter_title": "CAPÍTULO DE LA COOPERATIVA",
     "sections": [
       {
         "question": "¿Bajo qué principios desarrollarán sus actividades?",
@@ -61,7 +61,7 @@
     ]
   },
   {
-    "chapterTitle": "CAPÍTULO DE LA PRESTACIÓN DEL SERVICIO",
+    "chapter_title": "CAPÍTULO DE LA PRESTACIÓN DEL SERVICIO",
     "sections": [
       {
         "question": "Áreas que tendrá la cooperativa",
@@ -104,7 +104,7 @@
     ]
   },
   {
-    "chapterTitle": "CAPÍTULO ATRIBUCIONES Y OBLIGACIONES DE LAS PERSONAS ASOCIADAS",
+    "chapter_title": "CAPÍTULO ATRIBUCIONES Y OBLIGACIONES DE LAS PERSONAS ASOCIADAS",
     "sections": [
       {
         "question": "Obligaciones al ingresar respecto a que debe cumplir y sobre el capital social a aportar",
@@ -204,7 +204,7 @@
     ]
   },
   {
-    "chapterTitle": "CAPÍTULO RETRIBUCIONES PERIÓDICAS POR APORTE DE TRABAJO",
+    "chapter_title": "CAPÍTULO RETRIBUCIONES PERIÓDICAS POR APORTE DE TRABAJO",
     "sections": [
       {
         "question": "Monto de retribuciones periódicas",
@@ -261,7 +261,7 @@
     ]
   },
   {
-    "chapterTitle": "CAPÍTULO RETRIBUCIONES ANUALES QUE SURGEN DEL BALANCE CONTABLE",
+    "chapter_title": "CAPÍTULO RETRIBUCIONES ANUALES QUE SURGEN DEL BALANCE CONTABLE",
     "sections": [
       {
         "question": "¿Cómo se distribuyen el resultado anual?",

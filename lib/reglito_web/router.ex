@@ -18,6 +18,12 @@ defmodule ReglitoWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/info", PageController, :info
+
+    live_session :live do
+      live "/start", StartLive
+      live "/chapters_selection", ChaptersSelectionsLive
+    end
   end
 
   # Other scopes may use custom stacks.
