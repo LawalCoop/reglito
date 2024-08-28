@@ -35,11 +35,11 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
               <img class="h-16 mb-5" src={~p"/images/success.gif"} alt="success" />
               Completaste la selección de capitulos
             </p>
-            <button class="w-28 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+            <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
               <.link href={
                 ~p"/start?#{%{selected_chapters: Enum.map(@selected_chapters, fn chapter -> chapter["code"] end)}}"
               }>
-                Siguiente
+                Siguiente <.icon name="hero-chevron-right" />
               </.link>
             </button>
           </div>
@@ -56,10 +56,10 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
               |> Map.get("description") %>
             </p>
             <div class="w-full flex justify-end gap-5 pr-10">
-              <button class="text-red-800" phx-click="chapter_dropped">
+              <button class="text-red-700 hover:text-red-900" phx-click="chapter_dropped">
                 <.icon class="w-8 h-8" name="hero-x-circle" />
               </button>
-              <button class=" text-green-800" phx-click="chapter_selected">
+              <button class=" text-green-700 hover:text-green-900" phx-click="chapter_selected">
                 <.icon class="w-8 h-8" name="hero-check-circle" />
               </button>
             </div>
