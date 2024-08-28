@@ -23,6 +23,7 @@ defmodule ReglitoWeb.Router do
     live_session :live do
       live "/start", StartLive
       live "/chapters_selection", ChaptersSelectionsLive
+      live "/cooperative", CooperativeLive
     end
   end
 
