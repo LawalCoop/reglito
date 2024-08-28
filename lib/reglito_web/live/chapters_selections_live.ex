@@ -17,7 +17,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
               Capitulos seleccionados:
             </p>
             <%= for chapter <- @selected_chapters do %>
-              <p><%= chapter %></p>
+              <p><%= Map.get(chapter, "name") %></p>
             <% end %>
           </div>
         <% else %>
@@ -32,11 +32,15 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
         <%= if @selection_status == :done do %>
           <div class=" flex flex-col items-center gap-4 px-24">
             <p class="flex flex-col justify-center items-center text-2xl font-bold">
-              <.icon class="w-12 h-12 text-green-700" name="hero-check-circle" />
+              <img class="h-16 mb-5" src={~p"/images/success.gif"} alt="success" />
               Completaste la selección de capitulos
             </p>
             <button class="w-28 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
-              <.link href="/start">Siguiente</.link>
+              <.link href={
+                ~p"/start?#{%{selected_chapters: Enum.map(@selected_chapters, fn chapter -> chapter["code"] end)}}"
+              }>
+                Siguiente
+              </.link>
             </button>
           </div>
         <% else %>
@@ -67,8 +71,9 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
   end
 
   def mount(_params, _session, socket) do
+    # TODO: mover el fetch de los capitulos a su propio modulo
     chapters =
-      case File.read("./chapter_descriptions.json") do
+      case File.read("./chapters_description.json") do
         {:ok, content} ->
           # Parsear el contenido JSON
           case Jason.decode(content) do
@@ -111,11 +116,8 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
         |> assign(
           :selected_chapters,
           Enum.reverse([
-            [
-              chapters
-              |> Enum.at(current_chapter_index)
-              |> Map.get("name")
-            ]
+            chapters
+            |> Enum.at(current_chapter_index)
             | selected_chapters
           ])
         )
