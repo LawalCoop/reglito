@@ -6,7 +6,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
     <div class="w-full flex justify-center items-center pt-52 gap-4">
       <div class="flex flex-col gap-2 w-1/2 items-end text-justify">
         <p class="text-2xl font-bold">
-          ¿Qué aspectos de tu cooperativa querés reglamentar?
+          ¿Qué aspectos de <%= @coop_name %> querés reglamentar?
         </p>
         <p class="text-xl">
           Elegí los que consideres, no es obligatorio que sean todos.
@@ -70,8 +70,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
     """
   end
 
-  def mount(_params, _session, socket) do
-    # TODO: mover el fetch de los capitulos a su propio modulo
+  def mount(%{"coop_name" => coop_name, "matricula" => matricula}, _session, socket) do
     chapters =
       case File.read("./chapters_description.json") do
         {:ok, content} ->
@@ -81,11 +80,13 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
               json_data
 
             {:error, error} ->
-              IO.puts("Error al parsear el JSON: #{error}")
+              IO.puts("Error parsing JSON: #{error}")
+              []
           end
 
         {:error, reason} ->
-          IO.puts("Error al leer el archivo: #{reason}")
+          IO.puts("Error reading file: #{reason}")
+          []
       end
 
     socket =
@@ -94,6 +95,22 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
       |> assign(:chapters, chapters)
       |> assign(:selected_chapters, [])
       |> assign(:current_chapter_index, 0)
+      |> assign(:coop_name, coop_name)
+      |> assign(:matricula, matricula)
+
+    {:ok, socket}
+  end
+
+  def mount(_params, _session, socket) do
+    # Handle case where query parameters are missing
+    socket =
+      socket
+      |> assign(:selection_status, :started)
+      |> assign(:chapters, [])
+      |> assign(:selected_chapters, [])
+      |> assign(:current_chapter_index, 0)
+      |> assign(:coop_name, "")
+      |> assign(:matricula, "")
 
     {:ok, socket}
   end
