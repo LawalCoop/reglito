@@ -16,7 +16,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
             <p class="text-xl font-bold">
               Capitulos seleccionados:
             </p>
-            <%= for chapter <- @selected_chapters do %>
+            <%= for chapter <- Enum.reverse(@selected_chapters) do %>
               <p><%= Map.get(chapter, "name") %></p>
             <% end %>
           </div>
@@ -37,7 +37,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
             </p>
             <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
               <.link href={
-                ~p"/start?#{%{selected_chapters: Enum.map(@selected_chapters, fn chapter -> chapter["code"] end)}}"
+                ~p"/start?#{%{selected_chapters: Enum.reverse(Enum.map(@selected_chapters, fn chapter -> chapter["code"] end))}}"
               }>
                 Siguiente <.icon name="hero-chevron-right" />
               </.link>
@@ -115,11 +115,10 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
         socket
         |> assign(
           :selected_chapters,
-          Enum.reverse([
-            chapters
-            |> Enum.at(current_chapter_index)
+          [
+            Enum.at(chapters, current_chapter_index)
             | selected_chapters
-          ])
+          ]
         )
         |> assign(:current_chapter_index, new_current_index)
 

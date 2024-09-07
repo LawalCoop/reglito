@@ -20,10 +20,10 @@ defmodule ReglitoWeb.StartLive do
         <div class="w-1/2 h-full flex pl-20">
           <div class="flex flex-col w-full items-start pt-32">
             <p class="font-bold text-2xl mb-5">
-              <%= Enum.at(@chapters_info["COOPERATIVE"]["sections"], 0)["question"] %>
+              <%= @current_section["question"] %>
             </p>
             <div>
-              <%= for option <- Enum.at(@chapters_info["COOPERATIVE"]["sections"], 0)["options"] do %>
+              <%= for option <- @current_section["options"] do %>
                 <p>
                   <input
                     checked={
@@ -40,10 +40,16 @@ defmodule ReglitoWeb.StartLive do
               <% end %>
             </div>
             <div class="w-full flex justify-between mt-5">
-              <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+              <button
+                phx-click="previous_section"
+                class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+              >
                 <.icon name="hero-chevron-left" /> Volver
               </button>
-              <button class="flex justify-center ite bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+              <button
+                phx-click="next_section"
+                class="flex justify-center ite bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+              >
                 Siguiente <.icon name="hero-chevron-right" />
               </button>
             </div>
@@ -51,13 +57,12 @@ defmodule ReglitoWeb.StartLive do
         </div>
         <div class="w-1/2 h-full overflow-y-scroll m-5 p-5 bg-gray-100 rounded-xl">
           <div class="w-full flex justify-center">
-            <div class="s">
-              <p>
-                <%= render_template(
-                  Enum.at(@chapters_info["COOPERATIVE"]["sections"], 0)["result_template"],
-                  @options_selected
-                ) %>
-              </p>
+            <div>
+              <%= for {_i, articles_by_chapters} <- @articles do %>
+                <%= for {_i, articles} <- articles_by_chapters do %>
+                  <p><%= articles %></p>
+                <% end %>
+              <% end %>
             </div>
           </div>
         </div>
@@ -68,7 +73,7 @@ defmodule ReglitoWeb.StartLive do
 
   def mount(%{"selected_chapters" => selected_chapters}, _session, socket) do
     # TODO: mover el fetch de la info a su propio modulo
-    chapters_info =
+    chapters =
       case File.read("./chapters_data.json") do
         {:ok, content} ->
           # Parsear el contenido JSON
@@ -84,11 +89,23 @@ defmodule ReglitoWeb.StartLive do
           IO.puts("Error al leer el archivo: #{reason}")
       end
 
+    chapters =
+      chapters
+      |> Enum.filter(fn {key, _value} -> key in selected_chapters end)
+      |> Enum.into(%{})
+
+    start_index = 0
+
     socket =
       socket
+      |> assign(:chapters, chapters)
       |> assign(:selected_chapters, selected_chapters)
-      |> assign(:chapters_info, chapters_info)
+      |> assign(:chapter_index, start_index)
+      |> assign(:section_index, start_index)
+      |> assign_current_section()
       |> assign(:options_selected, [])
+      |> assign(:articles, %{})
+      |> assign(:to_display, [])
 
     {:ok, socket}
   end
@@ -108,6 +125,7 @@ defmodule ReglitoWeb.StartLive do
     socket =
       socket
       |> assign(:options_selected, options_selected)
+      |> assign_rules
 
     {:noreply, socket}
   end
@@ -125,14 +143,69 @@ defmodule ReglitoWeb.StartLive do
     socket =
       socket
       |> assign(:options_selected, options_selected)
+      |> assign_rules
 
     {:noreply, socket}
   end
 
-  defp render_template(template, options) do
-    template
-    |> String.replace("{COOPERATIVE}", "Lawal Cooperativa Tecnologica")
-    |> String.replace("{OPTIONS}", Enum.join(options, ", "))
-    |> String.replace("{NUMBER}", "1")
+  def handle_event("next_section", _, socket) do
+    section_index = socket.assigns.section_index
+
+    socket =
+      socket
+      |> assign(:section_index, section_index + 1)
+      |> assign_current_section
+
+    {:noreply, socket}
+  end
+
+  def handle_event("previous_section", _, socket) do
+    section_index = socket.assigns.section_index
+
+    socket =
+      socket
+      |> assign(:section_index, section_index - 1)
+      |> assign_current_section
+
+    {:noreply, socket}
+  end
+
+  def assign_current_section(socket) do
+    selected_chapters = socket.assigns.selected_chapters
+    chapter_index = socket.assigns.chapter_index
+    section_index = socket.assigns.section_index
+    chapters = socket.assigns.chapters
+
+    chapter_name = Enum.at(selected_chapters, chapter_index)
+
+    current_section =
+      chapters
+      |> Map.fetch!(chapter_name)
+      |> Map.fetch!("sections")
+      |> Enum.at(section_index)
+
+    assign(socket, :current_section, current_section)
+  end
+
+  defp assign_rules(socket) do
+    chapter_index = socket.assigns.chapter_index
+    section_index = socket.assigns.section_index
+    articles = socket.assigns.articles
+    options_selected = socket.assigns.options_selected
+    current_section = socket.assigns.current_section
+
+    template = current_section["result_template"]
+
+    template_with_options =
+      template
+      |> String.replace("{COOPERATIVE}", "Lawal Cooperativa Tecnologica")
+      |> String.replace("{OPTIONS}", Enum.join(Enum.reverse(options_selected), ", "))
+      |> String.replace("{NUMBER}", to_string(section_index + 1))
+
+    chapter_articles = Map.get(articles, to_string(chapter_index), %{})
+    section_articles = Map.put(chapter_articles, to_string(section_index), template_with_options)
+    articles = Map.put(articles, to_string(chapter_index), section_articles)
+
+    assign(socket, :articles, articles)
   end
 end

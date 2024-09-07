@@ -18,15 +18,14 @@
           "question": "¿Bajo que principios procurará el Consejo de Administración hacer su trabajo?",
           "selection_type": "multiple",
           "options": [
-            "alentar y promover el espíritu de trabajo mancomunado,",
+            "alentar y promover el espíritu de trabajo mancomunado",
             "el respeto común y la convivencia solidaria entre las personas asociadas",
-            "con el fin de crear el medio ideal que permita alcanzar la máxima productividad,",
-            "la ocupación continua de las personas asociadas,",
+            "con el fin de crear el medio ideal que permita alcanzar la máxima productividad",
+            "la ocupación continua de las personas asociadas",
             "el mantenimiento de la mejor relación con quienes contraten o se relacionen con la cooperativa",
-            "la constante educación y capacitación de las personas asociadas",
-            "Otro: campo para completar"
+            "la constante educación y capacitación de las personas asociadas"
           ],
-          "result_template": "ARTICULO X: El consejo de administración procurará el crecimiento de la entidad, sobre la base de [SELECCIÓN DEL USUARIO SEPARADO POR COMAS]. Este reglamento establecerá la manera de organización y funcionamiento de la cooperativa y establecerá la forma de disciplina y control requerido para ésta."
+          "result_template": "ARTICULO {NUMBER}: El consejo de administración procurará el crecimiento de la entidad, sobre la base de {OPTIONS}. Este reglamento establecerá la manera de organización y funcionamiento de la cooperativa y establecerá la forma de disciplina y control requerido para ésta."
         },
         {
           "question": "¿Se permite que se realicen reuniones de consejo abiertas a todas las personas asociadas que no sean asambleas?",
@@ -35,7 +34,7 @@
             "SI",
             "NO"
           ],
-          "result_template": "ARTÍCULO X: Las personas integrantes del Consejo de Administración y la sindicatura deberán ser elegidos en Asambleas General, Ordinaria o Extraordinaria por voto de las personas asociadas presentes por mayoría simple, que de acuerdo al Estatuto Social y a la Ley 20.337 o a la que la modifique y este reglamento estén en condiciones de hacerlo. Para ser candidato/a a consejero/a o síndico/a de la cooperativa la personas asociada deberá ser mayor de 18 años de edad. El consejo deberá reunirse como mínimo una vez al mes y podrá reunirse en cualquier momento que la circunstancia lo exija.",
+          "result_template": "ARTICULO {NUMBER}: Las personas integrantes del Consejo de Administración y la sindicatura deberán ser elegidos en Asambleas General, Ordinaria o Extraordinaria por voto de las personas asociadas presentes por mayoría simple, que de acuerdo al Estatuto Social y a la Ley 20.337 o a la que la modifique y este reglamento estén en condiciones de hacerlo. Para ser candidato/a a consejero/a o síndico/a de la cooperativa la personas asociada deberá ser mayor de 18 años de edad. El consejo deberá reunirse como mínimo una vez al mes y podrá reunirse en cualquier momento que la circunstancia lo exija.",
           "additionalText": "Cuando el consejo de administración lo considere conveniente, o cuando la trascendencia de los temas a resolver lo aconseje, se podrá convocar a Reunión de consejo abierta. Esta podrá ser convocada por cualquier integrante del consejo, por el síndico o por las personas asociadas que representen un 25% del total."
         },
         {
@@ -45,7 +44,7 @@
             "SI",
             "NO"
           ],
-          "result_template": "ARTÍCULO X: La gestión económica y contable dependerá del consejo de Administración, que lo hace a través de la estructura de la Cooperativa sin embargo todas las personas asociadas deberán prestar su colaboración en caso de ser requerida. En el desarrollo de las actividades se deberá cumplir con las disposiciones legales, estatutarias y las resoluciones de asambleas."
+          "result_template": "ARTICULO {NUMBER}: La gestión económica y contable dependerá del consejo de Administración, que lo hace a través de la estructura de la Cooperativa sin embargo todas las personas asociadas deberán prestar su colaboración en caso de ser requerida. En el desarrollo de las actividades se deberá cumplir con las disposiciones legales, estatutarias y las resoluciones de asambleas."
         },
         {
           "question": "¿Se autoriza a la cooperativa a subir imagenes, videos u otros soportes para difusión?",
@@ -54,7 +53,7 @@
             "SI",
             "NO"
           ],
-          "result_template": "ARTÍCULO X: Las personas asociadas autorizan a la cooperativa a utilizar sus imágenes, ya sea en fotografías, vídeos u otros medios audiovisuales, en el marco de las actividades promocionales, publicitarias y de difusión de la Cooperativa sin necesidad de que se genere ningún tipo de derecho a percibir contraprestación económica alguna por parte de las personas asociadas."
+          "result_template": "ARTICULO {NUMBER}: Las personas asociadas autorizan a la cooperativa a utilizar sus imágenes, ya sea en fotografías, vídeos u otros medios audiovisuales, en el marco de las actividades promocionales, publicitarias y de difusión de la Cooperativa sin necesidad de que se genere ningún tipo de derecho a percibir contraprestación económica alguna por parte de las personas asociadas."
         }
       ]
     },
@@ -80,7 +79,7 @@
             "SI",
             "NO"
           ],
-          "result_template": "ARTÍCULO X: La cooperativa se distribuirá en las siguientes áreas, [SELECCIÓN USUARIO SEPARADO POR COMAS], [TEXTO EN VERDE SOLO VA SI EN SEGUNDA SELECCIÓN PUSIERON SI] cada una de ellas tendrá un/a coordinador/a designado/a por el Consejo de Administración por el tiempo que este determine. El Consejo podrá a su vez, modificar las áreas de la cooperativa así como todo el articulado de esta sección sin necesidad de reforma del reglamento toda vez que son cuestiones de mera organización interna."
+          "result_template": "ARTICULO {NUMBER}: La cooperativa se distribuirá en las siguientes áreas, [SELECCIÓN USUARIO SEPARADO POR COMAS], [TEXTO EN VERDE SOLO VA SI EN SEGUNDA SELECCIÓN PUSIERON SI] cada una de ellas tendrá un/a coordinador/a designado/a por el Consejo de Administración por el tiempo que este determine. El Consejo podrá a su vez, modificar las áreas de la cooperativa así como todo el articulado de esta sección sin necesidad de reforma del reglamento toda vez que son cuestiones de mera organización interna."
         },
         {
           "question": "Horario de la cooperativa",
@@ -96,7 +95,7 @@
             }
           ],
           "note": "Aqui se pueden colocar horarios para cada sección, el artículo que se presenta esta redactado para tener un solo horario, pero puede modificarse en el documento final que surge de esta aplicación.",
-          "result_template": "ARTÍCULO X: Los días laborales se fijan, en principio salvo que la cooperativa requiera por tareas excepcionales otros, los días [CAMPO DÍAS LABORABLES] en los siguientes horarios: [CAMPO HORARIO]. Este horario podrá extenderse entre 30 minutos o más según las particularidades del servicio y ser modificado por el Consejo de Administración sin necesidad de reforma del presente reglamento por ser de mera organización interna."
+          "result_template": "ARTICULO {NUMBER}: Los días laborales se fijan, en principio salvo que la cooperativa requiera por tareas excepcionales otros, los días [CAMPO DÍAS LABORABLES] en los siguientes horarios: [CAMPO HORARIO]. Este horario podrá extenderse entre 30 minutos o más según las particularidades del servicio y ser modificado por el Consejo de Administración sin necesidad de reforma del presente reglamento por ser de mera organización interna."
         }
       ]
     },
@@ -109,7 +108,7 @@
             "SI",
             "NO"
           ],
-          "result_template": "ARTÍCULO X: Toda persona mayor de dieciocho (18) años que quiera asociarse, junto con la solicitud de adhesión por escrito, presentada al Consejo de Administración, deberá comprometerse a cumplir las disposiciones de la Ley de Cooperativas 20.337, el Estatuto Social, el presente Reglamento, las Resoluciones Asamblearias y del Consejo de Administración, y a suscribir e integrar el equivalente a un salario mínimo vital y móvil vigente a la fecha de ingreso, integrando como mínimo el 5% del capital suscripto al momento de la asociación y el resto en un tiempo no superior a 5 años."
+          "result_template": "ARTICULO {NUMBER}: Toda persona mayor de dieciocho (18) años que quiera asociarse, junto con la solicitud de adhesión por escrito, presentada al Consejo de Administración, deberá comprometerse a cumplir las disposiciones de la Ley de Cooperativas 20.337, el Estatuto Social, el presente Reglamento, las Resoluciones Asamblearias y del Consejo de Administración, y a suscribir e integrar el equivalente a un salario mínimo vital y móvil vigente a la fecha de ingreso, integrando como mínimo el 5% del capital suscripto al momento de la asociación y el resto en un tiempo no superior a 5 años."
         },
         {
           "question": "Reglas para las personas aspirantes a ingresar a la cooperativa",
@@ -135,7 +134,7 @@
               ]
             }
           ],
-          "result_template": "ARTÍCULO X: Todo persona aspirante a ingresar como asociado/a deberá cumplir con un período de prueba no mayor a [SELECCIÓN USUARIO] meses y a realizar [TEXTO EN VERDE SOLO SI ELIGE SI] y aprobar un curso de concientización cooperativa e introducción a la empresa de la economía social, al cabo de los cuales, acreditada su idoneidad laboral y espíritu cooperativista, el Consejo de Administración procederá a considerar y aprobar en su caso, el ingreso como persona asociada a la Cooperativa. El plazo de referencia quedará sujeto a cualquier modificación legislativa que establezca un plazo diferente."
+          "result_template": "ARTICULO {NUMBER}: Todo persona aspirante a ingresar como asociado/a deberá cumplir con un período de prueba no mayor a [SELECCIÓN USUARIO] meses y a realizar [TEXTO EN VERDE SOLO SI ELIGE SI] y aprobar un curso de concientización cooperativa e introducción a la empresa de la economía social, al cabo de los cuales, acreditada su idoneidad laboral y espíritu cooperativista, el Consejo de Administración procederá a considerar y aprobar en su caso, el ingreso como persona asociada a la Cooperativa. El plazo de referencia quedará sujeto a cualquier modificación legislativa que establezca un plazo diferente."
         },
         {
           "question": "Compromiso de personas asociadas con la cooperativa respecto a prestar su trabajo personal",
@@ -144,7 +143,7 @@
             "SI",
             "NO"
           ],
-          "result_template": "ARTÍCULO X: Las personas asociadas se comprometen a prestar su trabajo personal y su esfuerzo propio dentro de una empresa social, que se enmarca en la doctrina cooperativista, para desarrollar su objeto de la mejor manera posible, en términos de productividad, cumplimiento y eficiencia. Entendiendo y aceptando la responsabilidad conjunta, la participación activa y el compromiso para gestionar la empresa cooperativa."
+          "result_template": "ARTICULO {NUMBER}: Las personas asociadas se comprometen a prestar su trabajo personal y su esfuerzo propio dentro de una empresa social, que se enmarca en la doctrina cooperativista, para desarrollar su objeto de la mejor manera posible, en términos de productividad, cumplimiento y eficiencia. Entendiendo y aceptando la responsabilidad conjunta, la participación activa y el compromiso para gestionar la empresa cooperativa."
         },
         {
           "question": "Compromiso de personas asociadas con la cooperativa respecto a buscar la continuidad en el tiempo y absteniéndose de actitudes y opiniones contrarias",
@@ -153,7 +152,7 @@
             "SI",
             "NO"
           ],
-          "result_template": "ARTÍCULO X: Las personas asociadas entienden el carácter asociativo y se comprometen a respetar la Organización, buscando su continuidad en el tiempo, absteniéndose en actitudes y opiniones siempre que exista un interés contrario al de la Cooperativa. Primando de esta forma en todos los aspectos el interés general por encima del interés particular."
+          "result_template": "ARTICULO {NUMBER}: Las personas asociadas entienden el carácter asociativo y se comprometen a respetar la Organización, buscando su continuidad en el tiempo, absteniéndose en actitudes y opiniones siempre que exista un interés contrario al de la Cooperativa. Primando de esta forma en todos los aspectos el interés general por encima del interés particular."
         },
         {
           "question": "Derechos de las personas asociadas",
@@ -164,10 +163,9 @@
             "Solicitar a la Sindicatura información sobre la marcha de la Cooperativa y la verificación de los Estados Contables.",
             "Gozar de un período anual de licencias (vacaciones) acorde a su antigüedad.",
             "Como monotributistas, o en otro régimen previsional, contarán con aportes al sistema jubilatorio, obra social. Mantendrán un seguro de accidentes personales, un seguro de vida o el que lo reemplace según el sistema previsional elegido.",
-            "Podrán retirarse voluntariamente de la Cooperativa, dando aviso por escrito con treinta (30) días de antelación por lo menos. Al retirarse se le reintegrarán los aportes efectivamente realizados en cuotas sociales durante su permanencia como persona asociada. En el caso que la persona asociada renunciante tuviera deudas pendientes con la Cooperativa, a la suma de referencia se le deducirá el importe que corresponda.",
-            "Otro: campo para completar"
+            "Podrán retirarse voluntariamente de la Cooperativa, dando aviso por escrito con treinta (30) días de antelación por lo menos. Al retirarse se le reintegrarán los aportes efectivamente realizados en cuotas sociales durante su permanencia como persona asociada. En el caso que la persona asociada renunciante tuviera deudas pendientes con la Cooperativa, a la suma de referencia se le deducirá el importe que corresponda."
           ],
-          "result_template": "ARTÍCULO X: Son derechos de las personas asociadas: [SELECCIÓN USUARIO CADA ITEM ES UNA LETRA A), B), C), ETC]"
+          "result_template": "ARTICULO {NUMBER}: Son derechos de las personas asociadas: [SELECCIÓN USUARIO CADA ITEM ES UNA LETRA A), B), C), ETC]"
         },
         {
           "question": "Obligaciones de las personas asociadas",
@@ -195,7 +193,7 @@
             "Mantendrán el orden, la disciplina y acatarán las órdenes de sus superiores en lo referente a las tareas propias, sin que ello implique menoscabo alguno de sus derechos.",
             "Toda persona asociada está obligada a vigilar constantemente la marcha de la Cooperativa y la conducta de sus representantes legales."
           ],
-          "result_template": "ARTÍCULO X: Son obligaciones de las personas asociadas: [SELECCIÓN USUARIO CADA ITEM ES UNA LETRA A), B), C), ETC]"
+          "result_template": "ARTICULO {NUMBER}: Son obligaciones de las personas asociadas: [SELECCIÓN USUARIO CADA ITEM ES UNA LETRA A), B), C), ETC]"
         }
       ]
     },
@@ -233,7 +231,7 @@
               }
             }
           ],
-          "result_template": "ARTÍCULO X: Se fijan las siguientes categorías y jerarquías, atentas a las necesidades de la Cooperativa, cada persona pertenecerá a la categoría que designe el Consejo de Administración: [LISTA DE CATEGORÍAS SELECCIONADAS]. [SI SELECCIONA 'SI' EN LA SEGUNDA PREGUNTA] Presidente, Secretario, Tesorero: retirarán un [% EXTRA] más del Retiro normal previo a la asunción de las funciones de Consejero durante el tiempo que ejerza el cargo."
+          "result_template": "ARTICULO {NUMBER}: Se fijan las siguientes categorías y jerarquías, atentas a las necesidades de la Cooperativa, cada persona pertenecerá a la categoría que designe el Consejo de Administración: [LISTA DE CATEGORÍAS SELECCIONADAS]. [SI SELECCIONA 'SI' EN LA SEGUNDA PREGUNTA] Presidente, Secretario, Tesorero: retirarán un [% EXTRA] más del Retiro normal previo a la asunción de las funciones de Consejero durante el tiempo que ejerza el cargo."
         },
         {
           "question": "¿Se abonará antigüedad?",
@@ -242,7 +240,7 @@
             "SI",
             "NO"
           ],
-          "result_template": "ARTÍCULO X: Antigüedad: a partir de su ingreso a la Cooperativa, las personas asociadas percibirán un adicional por antigüedad, equivalente al 1% por año sobre los retiros básicos de cada persona asociada, por jornada laboral de 9 horas, con un tope máximo de 30 años."
+          "result_template": "ARTICULO {NUMBER}: Antigüedad: a partir de su ingreso a la Cooperativa, las personas asociadas percibirán un adicional por antigüedad, equivalente al 1% por año sobre los retiros básicos de cada persona asociada, por jornada laboral de 9 horas, con un tope máximo de 30 años."
         },
         {
           "question": "Formación de las personas asociadas en la cooperativa. ¿Se faculta al Consejo a realizar planes en este sentido?",
@@ -251,7 +249,7 @@
             "SI",
             "NO"
           ],
-          "result_template": "ARTÍCULO X: Formación: La formación técnica y cooperativa de las personas asociadas es un aspecto estratégico al desarrollo de la Empresa. En el marco de los planes de trabajo y de desenvolvimiento de la misma se faculta al Consejo de Administración a elaborar diversos planes de formación técnico empresarial, ya sea a través de iniciativas propias o en el marco de las asociaciones empresarias o del movimiento cooperativo o de convenios con escuelas, universidades o cualquier otro medio idóneo para tal fin."
+          "result_template": "ARTICULO {NUMBER}: Formación: La formación técnica y cooperativa de las personas asociadas es un aspecto estratégico al desarrollo de la Empresa. En el marco de los planes de trabajo y de desenvolvimiento de la misma se faculta al Consejo de Administración a elaborar diversos planes de formación técnico empresarial, ya sea a través de iniciativas propias o en el marco de las asociaciones empresarias o del movimiento cooperativo o de convenios con escuelas, universidades o cualquier otro medio idóneo para tal fin."
         }
       ]
     },
@@ -275,7 +273,7 @@
               "customField": true
             }
           ],
-          "result_template": "ARTÍCULO X: Para la distribución de los excedentes de fin de ejercicio y una vez afectados los porcentajes para la constitución de reservas y fondos determinados por la Ley de Cooperativas 20.337, artículo 42, el remanente se distribuirá en efectivo o en capital social entre las personas asociadas [TEXTO SEGÚN OPCIÓN SELECCIONADA]",
+          "result_template": "ARTICULO {NUMBER}: Para la distribución de los excedentes de fin de ejercicio y una vez afectados los porcentajes para la constitución de reservas y fondos determinados por la Ley de Cooperativas 20.337, artículo 42, el remanente se distribuirá en efectivo o en capital social entre las personas asociadas [TEXTO SEGÚN OPCIÓN SELECCIONADA]",
           "optionTemplates": {
             "A": "considerando las horas de trabajo efectivamente realizadas por cada persona en el año, valiéndo todas las horas el mismo monto con independencia de la categoría. El Consejo de Administración deberá realizar un registro mensual de horas trabajadas que permita hacer esta distribución.",
             "B": "en proporción a lo efectivamente cobrado periódicamente por sobre el total de la masa de retribuciones abonadas.",
