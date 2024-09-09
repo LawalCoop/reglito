@@ -107,6 +107,13 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
     if new_current_index >= length(chapters) do
       socket =
         socket
+        |> assign(
+          :selected_chapters,
+          [
+            Enum.at(chapters, current_chapter_index)
+            | selected_chapters
+          ]
+        )
         |> assign(:selection_status, :done)
 
       {:noreply, socket}
