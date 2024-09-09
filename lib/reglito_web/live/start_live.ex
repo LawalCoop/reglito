@@ -12,7 +12,7 @@ defmodule ReglitoWeb.StartLive do
         </div>
         <!-- TODO: hacer andar la barra de progreso -->
         <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-300">
-          <div class="bg-blue-600 h-2.5 rounded-full" style="width: 5%"></div>
+          <div class="bg-blue-600 h-2.5 rounded-full" style="width: 50%"></div>
         </div>
       </div>
 
@@ -20,10 +20,10 @@ defmodule ReglitoWeb.StartLive do
         <div class="w-1/2 h-full flex pl-20">
           <div class="flex flex-col w-full items-start pt-32">
             <p class="font-bold text-2xl mb-5">
-              <%= @current_section["question"] %>
+              <%= question(@sections, @current_section_index) %>
             </p>
             <div>
-              <%= for option <- @current_section["options"] do %>
+              <%= for option <- options(@sections, @current_section_index) do %>
                 <p>
                   <input
                     checked={
@@ -56,14 +56,10 @@ defmodule ReglitoWeb.StartLive do
           </div>
         </div>
         <div class="w-1/2 h-full overflow-y-scroll m-5 p-5 bg-gray-100 rounded-xl">
-          <div class="w-full flex justify-center">
-            <div>
-              <%= for {_i, articles_by_chapters} <- @articles do %>
-                <%= for {_i, articles} <- articles_by_chapters do %>
-                  <p><%= articles %></p>
-                <% end %>
-              <% end %>
-            </div>
+          <div id="" class="w-full flex flex-col justify-center">
+            <%= for {article, i} <- Enum.with_index(@articles) do %>
+              <p id={"#{i}"}><%= article %></p>
+            <% end %>
           </div>
         </div>
       </div>
@@ -94,18 +90,20 @@ defmodule ReglitoWeb.StartLive do
       |> Enum.filter(fn {key, _value} -> key in selected_chapters end)
       |> Enum.into(%{})
 
-    start_index = 0
+    sections =
+      chapters
+      |> Enum.flat_map(fn {chapter_key, %{"sections" => sections}} ->
+        Enum.map(sections, fn section ->
+          Map.put(section, "chapter", chapter_key)
+        end)
+      end)
 
     socket =
       socket
-      |> assign(:chapters, chapters)
-      |> assign(:selected_chapters, selected_chapters)
-      |> assign(:chapter_index, start_index)
-      |> assign(:section_index, start_index)
-      |> assign_current_section()
+      |> assign(:sections, sections)
+      |> assign(:current_section_index, 0)
       |> assign(:options_selected, [])
-      |> assign(:articles, %{})
-      |> assign(:to_display, [])
+      |> assign(:articles, [])
 
     {:ok, socket}
   end
@@ -115,17 +113,23 @@ defmodule ReglitoWeb.StartLive do
         %{"option-selected" => option_selected, "value" => _value},
         socket
       ) do
+    selection_type = aswer_type(socket.assigns.sections, socket.assigns.current_section_index)
     options_selected = socket.assigns.options_selected
 
-    options_selected = [
-      option_selected
-      | options_selected
-    ]
+    options_selected =
+      if selection_type == "exclusive" do
+        [option_selected]
+      else
+        [
+          option_selected
+          | options_selected
+        ]
+      end
 
     socket =
       socket
       |> assign(:options_selected, options_selected)
-      |> assign_rules
+      |> assign_articles()
 
     {:noreply, socket}
   end
@@ -135,77 +139,137 @@ defmodule ReglitoWeb.StartLive do
         %{"option-selected" => option_to_remove},
         socket
       ) do
+    selection_type = aswer_type(socket.assigns.sections, socket.assigns.current_section_index)
     options_selected = socket.assigns.options_selected
 
     options_selected =
-      Enum.reject(options_selected, fn option_selected -> option_selected == option_to_remove end)
+      if selection_type == "exclusive" do
+        []
+      else
+        Enum.reject(options_selected, fn option_selected ->
+          option_selected == option_to_remove
+        end)
+      end
 
     socket =
       socket
       |> assign(:options_selected, options_selected)
-      |> assign_rules
+      |> assign_articles()
 
     {:noreply, socket}
   end
 
   def handle_event("next_section", _, socket) do
-    section_index = socket.assigns.section_index
+    current_section_index = socket.assigns.current_section_index
+
+    # TODO: falta contemplar el caso en el que esta en la
+    # ultima section y tiene que pasar al proximo capitulo
+
+    # TODO: si esta al final del todo no navegar
 
     socket =
       socket
-      |> assign(:section_index, section_index + 1)
-      |> assign_current_section
+      |> assign(:current_section_index, current_section_index + 1)
+      |> assign(:options_selected, [])
 
     {:noreply, socket}
   end
 
   def handle_event("previous_section", _, socket) do
-    section_index = socket.assigns.section_index
+    current_section_index = socket.assigns.current_section_index
+
+    # TODO: falta contemplar el caso en el que esta en la
+    # primera section y tiene que pasar al capitulo anterior
+
+    # TODO: si esta al principio del todo no navegar
 
     socket =
       socket
-      |> assign(:section_index, section_index - 1)
-      |> assign_current_section
+      |> assign(:current_section_index, current_section_index - 1)
+      |> assign(:options_selected, [])
 
     {:noreply, socket}
   end
 
-  def assign_current_section(socket) do
-    selected_chapters = socket.assigns.selected_chapters
-    chapter_index = socket.assigns.chapter_index
-    section_index = socket.assigns.section_index
-    chapters = socket.assigns.chapters
+  defp assign_articles(socket) do
+    articles = socket.assigns.articles
+    sections = socket.assigns.sections
+    current_section_index = socket.assigns.current_section_index
+    options_selected = socket.assigns.options_selected
+    current_section = current_section(sections, current_section_index)
 
-    chapter_name = Enum.at(selected_chapters, chapter_index)
+    article_number =
+      if length(articles) < current_section_index,
+        do: length(articles) + 1,
+        else: current_section_index + 1
 
-    current_section =
-      chapters
-      |> Map.fetch!(chapter_name)
-      |> Map.fetch!("sections")
-      |> Enum.at(section_index)
+    new_rule_already_exist =
+      !is_nil(Enum.at(articles, current_section_index))
 
-    assign(socket, :current_section, current_section)
+    rule = fill_template(current_section, options_selected, article_number)
+
+    new_articles =
+      if new_rule_already_exist do
+        List.replace_at(articles, current_section_index, rule)
+      else
+        articles ++ [rule]
+      end
+
+    socket
+    |> assign(:articles, new_articles)
   end
 
-  defp assign_rules(socket) do
-    chapter_index = socket.assigns.chapter_index
-    section_index = socket.assigns.section_index
-    articles = socket.assigns.articles
-    options_selected = socket.assigns.options_selected
-    current_section = socket.assigns.current_section
-
+  defp fill_template(current_section, options_selected, article_number) do
     template = current_section["result_template"]
 
-    template_with_options =
-      template
-      |> String.replace("{COOPERATIVE}", "Lawal Cooperativa Tecnologica")
-      |> String.replace("{OPTIONS}", Enum.join(Enum.reverse(options_selected), ", "))
-      |> String.replace("{NUMBER}", to_string(section_index + 1))
+    case current_section["aswer_type"] do
+      "multiple" ->
+        template
+        |> String.replace("{COOPERATIVE}", "Lawal Cooperativa Tecnologica")
+        |> String.replace("{OPTIONS}", Enum.join(Enum.reverse(options_selected), ", "))
+        |> String.replace("{NUMBER}", to_string(article_number))
 
-    chapter_articles = Map.get(articles, to_string(chapter_index), %{})
-    section_articles = Map.put(chapter_articles, to_string(section_index), template_with_options)
-    articles = Map.put(articles, to_string(chapter_index), section_articles)
+      "exclusive" ->
+        if options_selected == ["SI"] do
+          template
+          |> String.replace("{NUMBER}", to_string(article_number))
+        else
+          nil
+        end
 
-    assign(socket, :articles, articles)
+      "multiple_with_exclusive" ->
+        template
+        |> String.replace("{OPTIONS}", Enum.join(Enum.reverse(options_selected), ", "))
+        |> String.replace("{NUMBER}", to_string(article_number))
+    end
+  end
+
+  def manipular_string(str, conservar_contenido \\ true) do
+    if conservar_contenido do
+      # Remueve las llaves pero deja el contenido dentro
+      Regex.replace(~r/\{([^}]+)\}/, str, "\\1")
+    else
+      # Elimina todo el contenido entre las llaves
+      Regex.replace(~r/\{[^}]+\}/, str, "")
+    end
+  end
+
+  defp current_section(sections, index) do
+    Enum.at(sections, index)
+  end
+
+  defp question(sections, index) do
+    current_section(sections, index)
+    |> Map.fetch!("question")
+  end
+
+  defp options(sections, index) do
+    current_section(sections, index)
+    |> Map.fetch!("options")
+  end
+
+  defp aswer_type(sections, index) do
+    current_section(sections, index)
+    |> Map.fetch!("aswer_type")
   end
 end

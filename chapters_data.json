@@ -3,7 +3,7 @@
       "sections": [
         {
           "question": "¿Bajo qué principios desarrollarán sus actividades?",
-          "selection_type": "multiple",
+          "aswer_type": "multiple",
           "options": [
             "Ley 20.337",
             "Estatuto social",
@@ -16,7 +16,7 @@
         },
         {
           "question": "¿Bajo que principios procurará el Consejo de Administración hacer su trabajo?",
-          "selection_type": "multiple",
+          "aswer_type": "multiple",
           "options": [
             "alentar y promover el espíritu de trabajo mancomunado",
             "el respeto común y la convivencia solidaria entre las personas asociadas",
@@ -29,7 +29,7 @@
         },
         {
           "question": "¿Se permite que se realicen reuniones de consejo abiertas a todas las personas asociadas que no sean asambleas?",
-          "selection_type": "exclusive",
+          "aswer_type": "exclusive",
           "options": [
             "SI",
             "NO"
@@ -39,7 +39,7 @@
         },
         {
           "question": "¿Las personas asociadas deben prestar su colaboración cuando sea requerida a pesar que el consejo es el encargado de la gestión económica y contable?",
-          "selection_type": "exclusive",
+          "aswer_type": "exclusive",
           "options": [
             "SI",
             "NO"
@@ -48,7 +48,7 @@
         },
         {
           "question": "¿Se autoriza a la cooperativa a subir imagenes, videos u otros soportes para difusión?",
-          "selection_type": "exclusive",
+          "aswer_type": "exclusive",
           "options": [
             "SI",
             "NO"
@@ -61,29 +61,26 @@
       "sections": [
         {
           "question": "Áreas que tendrá la cooperativa",
-          "selection_type": "multiple",
+          "aswer_type": "multiple_with_exclusive",
           "options": [
             "Administración",
             "Producción",
-            "Control de calidad",
-            "Agregar 1 campo para completar",
-            "Agregar 2 campo para completar",
-            "Agregar 3 campo para completar",
-            "Agregar 4 campo para completar"
-          ]
-        },
-        {
-          "question": "Cada área ¿tendrá una persona que coordine?",
-          "selection_type": "exclusive",
-          "options": [
-            "SI",
-            "NO"
+            "Control de calidad"
           ],
-          "result_template": "ARTICULO {NUMBER}: La cooperativa se distribuirá en las siguientes áreas, [SELECCIÓN USUARIO SEPARADO POR COMAS], [TEXTO EN VERDE SOLO VA SI EN SEGUNDA SELECCIÓN PUSIERON SI] cada una de ellas tendrá un/a coordinador/a designado/a por el Consejo de Administración por el tiempo que este determine. El Consejo podrá a su vez, modificar las áreas de la cooperativa así como todo el articulado de esta sección sin necesidad de reforma del reglamento toda vez que son cuestiones de mera organización interna."
+          "related_question": {
+            "question": "Cada área ¿tendrá una persona que coordine?",
+            "aswer_type": "exclusive",
+            "options": [
+              "SI",
+              "NO"
+            ],
+            "result_template": "cada una de ellas tendrá un/a coordinador/a designado/a por el Consejo de Administración por el tiempo que este determine."
+          },
+          "result_template": "ARTICULO {NUMBER}: La cooperativa se distribuirá en las siguientes áreas, {OPTIONS}, {RELATED_QUESTION}. El Consejo podrá a su vez, modificar las áreas de la cooperativa así como todo el articulado de esta sección sin necesidad de reforma del reglamento toda vez que son cuestiones de mera organización interna."
         },
         {
           "question": "Horario de la cooperativa",
-          "selection_type": "form",
+          "aswer_type": "form",
           "fields": [
             {
               "label": "Días laborables",
@@ -103,7 +100,7 @@
       "sections": [
         {
           "question": "Obligaciones al ingresar respecto a que debe cumplir y sobre el capital social a aportar",
-          "selection_type": "exclusive",
+          "aswer_type": "exclusive",
           "options": [
             "SI",
             "NO"
@@ -115,7 +112,7 @@
           "subSections": [
             {
               "question": "Meses en período de prueba",
-              "selection_type": "exclusive",
+              "aswer_type": "exclusive",
               "options": [
                 "1",
                 "2",
@@ -127,7 +124,7 @@
             },
             {
               "question": "¿Le exigimos aprobar un curso de concientización cooperativa?",
-              "selection_type": "exclusive",
+              "aswer_type": "exclusive",
               "options": [
                 "SI",
                 "NO"
@@ -138,7 +135,7 @@
         },
         {
           "question": "Compromiso de personas asociadas con la cooperativa respecto a prestar su trabajo personal",
-          "selection_type": "exclusive",
+          "aswer_type": "exclusive",
           "options": [
             "SI",
             "NO"
@@ -147,7 +144,7 @@
         },
         {
           "question": "Compromiso de personas asociadas con la cooperativa respecto a buscar la continuidad en el tiempo y absteniéndose de actitudes y opiniones contrarias",
-          "selection_type": "exclusive",
+          "aswer_type": "exclusive",
           "options": [
             "SI",
             "NO"
@@ -156,7 +153,7 @@
         },
         {
           "question": "Derechos de las personas asociadas",
-          "selection_type": "multiple",
+          "aswer_type": "multiple",
           "options": [
             "Ser elector/a y elegido/a para el desempeño de los diferentes cargos en los marcos que establece el Estatuto Social y el presente Reglamento Interno.",
             "Con la firma del cincuenta por ciento (50%) del total de las personas asociadas, se podrá solicitar la realización de asambleas extraordinarias. Esta convocatoria deberá expresar concretamente los puntos del Orden del Día y deberá ser enviada al Consejo de Administración. La misma deberá realizarse dentro de los treinta (30) días de solicitada en concordancia con lo que marca el Estatuto Social. Si la asamblea ordinaria se realizará dentro de los noventa (90) días de realizado el pedido, el Consejo de Administración podrá denegarla, debiendo incluir los puntos solicitados dentro del orden del día de la Asamblea Ordinaria.",
@@ -169,7 +166,7 @@
         },
         {
           "question": "Obligaciones de las personas asociadas",
-          "selection_type": "multiple",
+          "aswer_type": "multiple",
           "options": [
             "Acatar y hacer respetar el Estatuto Social, el Reglamento Interno, las resoluciones del Consejo de Administración y las resoluciones emanadas de las Asambleas.",
             "Preservar el orden, la armonía y la disciplina dentro de la Cooperativa, evitando incurrir en riñas o discusiones entre personas asociadas o respecto a clientes o terceras personas vinculadas a la empresa, de modo de no afectar la producción en horario de trabajo y de preservar la imagen cooperativista.",
@@ -204,7 +201,7 @@
           "subSections": [
             {
               "question": "Categorías dentro de la Cooperativa",
-              "selection_type": "multiple",
+              "aswer_type": "multiple",
               "options": [
                 "Ingresante",
                 "Administrativo",
@@ -219,7 +216,7 @@
             },
             {
               "question": "¿Se remunerará con un plus a las personas que ocupen el Consejo de Administración?",
-              "selection_type": "exclusive",
+              "aswer_type": "exclusive",
               "options": [
                 "SI",
                 "NO"
@@ -235,7 +232,7 @@
         },
         {
           "question": "¿Se abonará antigüedad?",
-          "selection_type": "exclusive",
+          "aswer_type": "exclusive",
           "options": [
             "SI",
             "NO"
@@ -244,7 +241,7 @@
         },
         {
           "question": "Formación de las personas asociadas en la cooperativa. ¿Se faculta al Consejo a realizar planes en este sentido?",
-          "selection_type": "exclusive",
+          "aswer_type": "exclusive",
           "options": [
             "SI",
             "NO"
@@ -257,7 +254,7 @@
       "sections": [
         {
           "question": "¿Cómo se distribuyen el resultado anual?",
-          "selection_type": "exclusive",
+          "aswer_type": "exclusive",
           "options": [
             {
               "id": "A",
