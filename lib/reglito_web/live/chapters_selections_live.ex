@@ -1,4 +1,5 @@
 defmodule ReglitoWeb.ChaptersSelectionsLive do
+  alias Reglito.Chapters
   use ReglitoWeb, :live_view
 
   def render(assigns) do
@@ -71,22 +72,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
   end
 
   def mount(_params, _session, socket) do
-    # TODO: mover el fetch de los capitulos a su propio modulo
-    chapters =
-      case File.read("./chapters_description.json") do
-        {:ok, content} ->
-          # Parsear el contenido JSON
-          case Jason.decode(content) do
-            {:ok, json_data} ->
-              json_data
-
-            {:error, error} ->
-              IO.puts("Error al parsear el JSON: #{error}")
-          end
-
-        {:error, reason} ->
-          IO.puts("Error al leer el archivo: #{reason}")
-      end
+    chapters = Chapters.read_chapters_description!()
 
     socket =
       socket
