@@ -66,6 +66,7 @@ defmodule Reglito.MixProject do
       {:credo, "~> 1.7", runtime: false, only: :dev},
       {:sobelow, "~> 0.8", only: :dev},
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
+      {:req, "~> 0.4.0"}
     ]
   end
 

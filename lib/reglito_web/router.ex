@@ -12,6 +12,7 @@ defmodule ReglitoWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
   end
 
   scope "/", ReglitoWeb do
@@ -27,10 +28,12 @@ defmodule ReglitoWeb.Router do
     end
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", ReglitoWeb do
-  #   pipe_through :api
-  # end
+
+  scope "/api", ReglitoWeb do
+    pipe_through :api
+
+    post "/register", SessionController, :modify_session
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:reglito, :dev_routes) do

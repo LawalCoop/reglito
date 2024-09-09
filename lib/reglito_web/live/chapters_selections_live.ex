@@ -70,12 +70,18 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
     """
   end
 
-  def mount(%{"coop_name" => coop_name, "matricula" => matricula}, _session, socket) do
+  def mount(_params, session, socket) do
+
+    coop_name = session["coop_name"]
+    matricula = session["matricula"]
+
+    IO.inspect(session, label: "Session")
+
     chapters =
       case File.read("./chapters_description.json") do
         {:ok, content} ->
           # Parsear el contenido JSON
-          case Jason.decode(content) do
+           case Jason.decode(content) do
             {:ok, json_data} ->
               json_data
 
@@ -101,19 +107,6 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
     {:ok, socket}
   end
 
-  def mount(_params, _session, socket) do
-    # Handle case where query parameters are missing
-    socket =
-      socket
-      |> assign(:selection_status, :started)
-      |> assign(:chapters, [])
-      |> assign(:selected_chapters, [])
-      |> assign(:current_chapter_index, 0)
-      |> assign(:coop_name, "")
-      |> assign(:matricula, "")
-
-    {:ok, socket}
-  end
 
   def handle_event("chapter_selected", _, socket) do
     chapters = socket.assigns.chapters
