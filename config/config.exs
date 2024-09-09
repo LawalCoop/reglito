@@ -7,10 +7,6 @@
 # General application configuration
 import Config
 
-#config :reglito,
-  #ecto_repos: [Reglito.Repo],
-  #generators: [timestamp_type: :utc_datetime]
-
 # Configures the endpoint
 config :reglito, ReglitoWeb.Endpoint,
   url: [host: "localhost"],
