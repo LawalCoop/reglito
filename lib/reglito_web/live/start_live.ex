@@ -61,6 +61,7 @@ defmodule ReglitoWeb.StartLive do
                 </div>
               </div>
             <% end %>
+
             <div class="w-full flex justify-between mt-5">
               <button
                 phx-click="previous_section"
@@ -68,12 +69,20 @@ defmodule ReglitoWeb.StartLive do
               >
                 <.icon name="hero-chevron-left" /> Volver
               </button>
-              <button
-                phx-click="next_section"
-                class="flex justify-center ite bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
-              >
-                Siguiente <.icon name="hero-chevron-right" />
-              </button>
+              <%= if @is_the_last_one do %>
+                <button class="flex justify-center ite bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+                  <.link href="/check">
+                    Revisar <.icon name="hero-chevron-right" />
+                  </.link>
+                </button>
+              <% else %>
+                <button
+                  phx-click="next_section"
+                  class="flex justify-center ite bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+                >
+                  Siguiente <.icon name="hero-chevron-right" />
+                </button>
+              <% end %>
             </div>
           </div>
         </div>
@@ -122,6 +131,7 @@ defmodule ReglitoWeb.StartLive do
 
     socket =
       socket
+      |> assign(:is_the_last_one, false)
       |> assign(:sections, sections)
       |> assign(:current_section_index, 0)
       |> assign(:aswer, [])
@@ -248,6 +258,7 @@ defmodule ReglitoWeb.StartLive do
       socket
       |> assign(:current_section_index, new_index)
       |> assign(:aswer, [])
+      |> assign(:is_the_last_one, length(sections) == new_index + 1)
 
     {:noreply, socket}
   end
@@ -266,6 +277,7 @@ defmodule ReglitoWeb.StartLive do
       socket
       |> assign(:current_section_index, new_index)
       |> assign(:aswer, [])
+      |> assign(:is_the_last_one, false)
 
     {:noreply, socket}
   end

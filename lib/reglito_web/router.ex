@@ -19,6 +19,7 @@ defmodule ReglitoWeb.Router do
 
     get "/", PageController, :home
     get "/info", PageController, :info
+    get "/check", PageController, :check
 
     live_session :live do
       live "/start", StartLive
