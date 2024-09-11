@@ -63,7 +63,8 @@ defmodule Reglito.MixProject do
       {:bandit, "~> 1.2"},
       {:credo, "~> 1.7", runtime: false, only: :dev},
       {:sobelow, "~> 0.8", only: :dev},
-      {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
+      {:pdf_generator, ">=0.6.0"}
     ]
   end
 
