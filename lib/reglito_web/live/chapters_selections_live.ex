@@ -6,7 +6,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
     <div class="w-full flex justify-center items-center pt-52 gap-4">
       <div class="flex flex-col gap-2 w-1/2 items-end text-justify">
         <p class="text-2xl font-bold">
-          ¿Qué aspectos de <%= @coop_name %> querés reglamentar?
+          ¿Qué aspectos de <%= @cooperative_name %> querés reglamentar?
         </p>
         <p class="text-xl">
           Elegí los que consideres, no es obligatorio que sean todos.
@@ -71,9 +71,8 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
   end
 
   def mount(_params, session, socket) do
-
-    coop_name = session["coop_name"]
-    matricula = session["matricula"]
+    cooperative_name = session["cooperative_name"]
+    registration_number = session["registration_number"]
 
     IO.inspect(session, label: "Session")
 
@@ -81,7 +80,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
       case File.read("./chapters_description.json") do
         {:ok, content} ->
           # Parsear el contenido JSON
-           case Jason.decode(content) do
+          case Jason.decode(content) do
             {:ok, json_data} ->
               json_data
 
@@ -101,12 +100,11 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
       |> assign(:chapters, chapters)
       |> assign(:selected_chapters, [])
       |> assign(:current_chapter_index, 0)
-      |> assign(:coop_name, coop_name)
-      |> assign(:matricula, matricula)
+      |> assign(:cooperative_name, cooperative_name)
+      |> assign(:registration_number, registration_number)
 
     {:ok, socket}
   end
-
 
   def handle_event("chapter_selected", _, socket) do
     chapters = socket.assigns.chapters

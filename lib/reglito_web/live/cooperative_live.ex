@@ -10,26 +10,26 @@ defmodule ReglitoWeb.CooperativeLive do
       <div class="w-full max-w-xs">
         <form phx-submit="submit_coop" class="bg-white shadow-xl rounded px-8 pt-6 pb-8 mb-4">
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="coop_name">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="cooperative_name">
               Nombre de la Cooperativa
             </label>
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="coop_name"
-              name="coop_name"
+              id="cooperative_name"
+              name="cooperative_name"
               type="text"
               placeholder="Nombre de la Cooperativa"
               phx-hook="Form"
             />
           </div>
           <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="matricula">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="registration_number">
               Matrícula
             </label>
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="matricula"
-              name="matricula"
+              id="registration_number"
+              name="registration_number"
               type="text"
               placeholder="Matrícula"
               phx-hook="Form"
@@ -49,12 +49,10 @@ defmodule ReglitoWeb.CooperativeLive do
     """
   end
 
-  def handle_event("submit_coop", %{"coop_name" => coop_name, "matricula" => matricula}, socket) do
-    redirect_path = "/api/register?coop_name=#{coop_name}&matricula=#{matricula}"
+  def handle_event("submit_coop", %{"cooperative_name" => cooperative_name, "registration_number" => registration_number}, socket) do
+    redirect_path = "/api/register?cooperative_name=#{cooperative_name}&registration_number=#{registration_number}"
 
-    socket
-    |> push_redirect(to: redirect_path)
-    |> then(&{:noreply, &1})
+    {:noreply, push_redirect(socket, to: redirect_path)}
   end
 
   def handle_event(_event, _params, socket) do

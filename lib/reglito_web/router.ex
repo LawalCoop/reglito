@@ -31,7 +31,7 @@ defmodule ReglitoWeb.Router do
   scope "/api", ReglitoWeb do
     pipe_through :api
 
-    get "/register", SessionController, :modify_session
+    get "/register", SessionController, :put_cooperative_info
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
