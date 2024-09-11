@@ -50,23 +50,11 @@ defmodule ReglitoWeb.CooperativeLive do
   end
 
   def handle_event("submit_coop", %{"coop_name" => coop_name, "matricula" => matricula}, socket) do
-    url = "http://localhost:4000/api/register"
-    body = %{"coop_name" => coop_name, "matricula" => matricula}
+    redirect_path = "/api/register?coop_name=#{coop_name}&matricula=#{matricula}"
 
-    res = Req.post!(url, json: body, headers: [{"Content-Type", "application/json"}])
-
-    case res.status do
-      201 ->
-        socket =
-          socket
-          |> put_flash(:info, "Successfully registered.")
-          |> push_redirect(to: "/chapters_selection")
-
-        {:noreply, socket}
-
-      _ ->
-        {:noreply, assign(socket, :error, "Failed to register")}
-    end
+    socket
+    |> push_redirect(to: redirect_path)
+    |> then(&{:noreply, &1})
   end
 
   def handle_event(_event, _params, socket) do
