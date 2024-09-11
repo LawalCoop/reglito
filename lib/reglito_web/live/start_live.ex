@@ -7,19 +7,24 @@ defmodule ReglitoWeb.StartLive do
     <div class="flex flex-col h-full w-full">
       <div class="px-20">
         <div class="p-4">
-          <!-- TODO: Mostrar informacion de la cooperativa no hardcodeada -->
           <p class="">Reglamento interno de:</p>
           <p class="text-xl font-bold">Lawal Cooperativa Tecnologica Ltda.</p>
         </div>
-        <!-- TODO: hacer andar la barra de progreso -->
+        <p class="font-bold mb-2">
+          Capitulo: <%= @chapter_name_by_code[chapter(@sections, @current_section_index)] %>
+        </p>
         <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-300">
-          <div class="bg-blue-600 h-2.5 rounded-full" style="width: 50%"></div>
+          <div
+            class="bg-blue-600 h-2.5 rounded-full"
+            style={"width: #{@progress_multiplier  * (@current_section_index + 1)}%"}
+          >
+          </div>
         </div>
       </div>
 
       <div class="flex">
         <div class="w-1/2 h-full flex pl-20">
-          <div class="flex flex-col w-full items-start pt-32">
+          <div class="flex flex-col w-full items-start pt-16">
             <p class="font-bold text-2xl mb-5">
               <%= question(@sections, @current_section_index) %>
             </p>
@@ -88,7 +93,7 @@ defmodule ReglitoWeb.StartLive do
           </div>
         </div>
         <div class="w-1/2 h-full overflow-y-scroll m-5 p-5 bg-gray-100 rounded-xl">
-          <div id="" class="w-full flex flex-col justify-center">
+          <div class="w-full flex flex-col justify-center">
             <%= for {article, i} <- Enum.with_index(@articles) do %>
               <p id={"#{i}"}><%= article %></p>
             <% end %>
@@ -100,7 +105,12 @@ defmodule ReglitoWeb.StartLive do
   end
 
   def mount(%{"selected_chapters" => selected_chapters}, _session, socket) do
-    chapters = Chapters.read_chapters_data!()
+    chapters = Chapters.read_chapters_data()
+
+    chapter_name_by_code =
+      for %{"code" => code, "name" => name} <- Chapters.read_chapters_description(),
+          into: %{},
+          do: {code, name}
 
     chapters =
       chapters
@@ -115,14 +125,19 @@ defmodule ReglitoWeb.StartLive do
         end)
       end)
 
+    progress_multiplier = 100 / length(sections)
+    start_index = 0
+
     socket =
       socket
+      |> assign(:progress_multiplier, progress_multiplier)
       |> assign(:is_the_last_one, false)
       |> assign(:sections, sections)
-      |> assign(:current_section_index, 0)
+      |> assign(:current_section_index, start_index)
       |> assign(:aswer, [])
       |> assign(:related_question_aswer, [])
       |> assign(:articles, [])
+      |> assign(:chapter_name_by_code, chapter_name_by_code)
 
     {:ok, socket}
   end
@@ -335,16 +350,6 @@ defmodule ReglitoWeb.StartLive do
     end
   end
 
-  def manipular_string(str, conservar_contenido \\ true) do
-    if conservar_contenido do
-      # Remueve las llaves pero deja el contenido dentro
-      Regex.replace(~r/\{([^}]+)\}/, str, "\\1")
-    else
-      # Elimina todo el contenido entre las llaves
-      Regex.replace(~r/\{[^}]+\}/, str, "")
-    end
-  end
-
   defp current_section(sections, index) do
     Enum.at(sections, index)
   end
@@ -362,6 +367,11 @@ defmodule ReglitoWeb.StartLive do
   defp aswer_type(sections, index) do
     current_section(sections, index)
     |> Map.fetch!("aswer_type")
+  end
+
+  defp chapter(sections, index) do
+    current_section(sections, index)
+    |> Map.fetch!("chapter")
   end
 
   defp related_question(sections, index) do
