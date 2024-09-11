@@ -1,33 +1,15 @@
 defmodule Reglito.Chapters do
-  def read_chapters_description!() do
-    case File.read("lib/reglito/chapters_description.json") do
-      {:ok, content} ->
-        case Jason.decode(content) do
-          {:ok, json_data} ->
-            json_data
+  @chapters_description_file "lib/reglito/json/chapters_description.json"
+  @chapters_data_file "lib/reglito/json/chapters_data.json"
 
-          {:error, error} ->
-            raise "Error al parsear el JSON: #{error}"
-        end
+  @chapters_description Jason.decode!(File.read!(@chapters_description_file))
+  @chapters_data Jason.decode!(File.read!(@chapters_data_file))
 
-      {:error, reason} ->
-        raise "Error al leer el archivo: #{reason}"
-    end
+  def read_chapters_description() do
+    @chapters_description
   end
 
-  def read_chapters_data!() do
-    case File.read("lib/reglito/chapters_data.json") do
-      {:ok, content} ->
-        case Jason.decode(content) do
-          {:ok, json_data} ->
-            json_data
-
-          {:error, error} ->
-            raise "Error al parsear el JSON: #{error}"
-        end
-
-      {:error, reason} ->
-        raise "Error al leer el archivo: #{reason}"
-    end
+  def read_chapters_data() do
+    @chapters_data
   end
 end
