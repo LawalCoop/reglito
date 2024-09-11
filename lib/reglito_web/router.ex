@@ -25,6 +25,7 @@ defmodule ReglitoWeb.Router do
       live "/start", StartLive
       live "/chapters_selection", ChaptersSelectionsLive
       live "/cooperative", CooperativeLive
+      live "/check", CheckLive
     end
   end
 

@@ -9,7 +9,6 @@ defmodule Reglito.Application do
   def start(_type, _args) do
     children = [
       ReglitoWeb.Telemetry,
-      # Reglito.Repo,
       {DNSCluster, query: Application.get_env(:reglito, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Reglito.PubSub},
       # Start the Finch HTTP client for sending emails

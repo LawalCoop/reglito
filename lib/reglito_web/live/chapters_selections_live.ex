@@ -1,4 +1,5 @@
 defmodule ReglitoWeb.ChaptersSelectionsLive do
+  alias Reglito.Chapters
   use ReglitoWeb, :live_view
 
   def render(assigns) do
@@ -16,7 +17,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
             <p class="text-xl font-bold">
               Capitulos seleccionados:
             </p>
-            <%= for chapter <- @selected_chapters do %>
+            <%= for chapter <- Enum.reverse(@selected_chapters) do %>
               <p><%= Map.get(chapter, "name") %></p>
             <% end %>
           </div>
@@ -37,7 +38,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
             </p>
             <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
               <.link href={
-                ~p"/start?#{%{selected_chapters: Enum.map(@selected_chapters, fn chapter -> chapter["code"] end)}}"
+                ~p"/start?#{%{selected_chapters: Enum.reverse(Enum.map(@selected_chapters, fn chapter -> chapter["code"] end))}}"
               }>
                 Siguiente <.icon name="hero-chevron-right" />
               </.link>
@@ -73,26 +74,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
   def mount(_params, session, socket) do
     cooperative_name = session["cooperative_name"]
     registration_number = session["registration_number"]
-
-    IO.inspect(session, label: "Session")
-
-    chapters =
-      case File.read("./chapters_description.json") do
-        {:ok, content} ->
-          # Parsear el contenido JSON
-          case Jason.decode(content) do
-            {:ok, json_data} ->
-              json_data
-
-            {:error, error} ->
-              IO.puts("Error parsing JSON: #{error}")
-              []
-          end
-
-        {:error, reason} ->
-          IO.puts("Error reading file: #{reason}")
-          []
-      end
+    chapters = Chapters.read_chapters_description()
 
     socket =
       socket
@@ -115,6 +97,13 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
     if new_current_index >= length(chapters) do
       socket =
         socket
+        |> assign(
+          :selected_chapters,
+          [
+            Enum.at(chapters, current_chapter_index)
+            | selected_chapters
+          ]
+        )
         |> assign(:selection_status, :done)
 
       {:noreply, socket}
@@ -123,11 +112,10 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
         socket
         |> assign(
           :selected_chapters,
-          Enum.reverse([
-            chapters
-            |> Enum.at(current_chapter_index)
+          [
+            Enum.at(chapters, current_chapter_index)
             | selected_chapters
-          ])
+          ]
         )
         |> assign(:current_chapter_index, new_current_index)
 
