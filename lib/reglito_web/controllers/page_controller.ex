@@ -8,8 +8,4 @@ defmodule ReglitoWeb.PageController do
   def info(conn, _params) do
     render(conn, :info)
   end
-
-  def check(conn, _params) do
-    render(conn, :check)
-  end
 end

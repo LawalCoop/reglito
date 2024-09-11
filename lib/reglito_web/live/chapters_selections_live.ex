@@ -72,7 +72,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
   end
 
   def mount(_params, _session, socket) do
-    chapters = Chapters.read_chapters_description!()
+    chapters = Chapters.read_chapters_description()
 
     socket =
       socket
