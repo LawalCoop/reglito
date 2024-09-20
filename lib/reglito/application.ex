@@ -16,7 +16,8 @@ defmodule Reglito.Application do
       # Start a worker by calling: Reglito.Worker.start_link(arg)
       # {Reglito.Worker, arg},
       # Start to serve requests, typically the last entry
-      ReglitoWeb.Endpoint
+      ReglitoWeb.Endpoint,
+      ChromicPDF
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

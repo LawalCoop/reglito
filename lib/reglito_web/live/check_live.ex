@@ -23,7 +23,8 @@ defmodule ReglitoWeb.CheckLive do
           <%= @content %>
         </textarea>
         <button
-          phx-click="export"
+          id="export"
+          phx-hook="Export"
           class="w-52 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded flex justify-center items-center"
         >
           Exportar Archivo <.icon name="hero-arrow-down-tray" />
@@ -37,19 +38,23 @@ defmodule ReglitoWeb.CheckLive do
     {:ok, assign(socket, :content, @content)}
   end
 
-  def handle_event("export", _unsigned_params, socket) do
-    case PdfGenerator.generate_binary(socket.assigns.content, page_size: "A4") do
+  def handle_event("fetch_content", _unsigned_params, socket) do
+    {:noreply, push_event(socket, "fetch-content", %{})}
+  end
+
+  def handle_event("send_html_to_backend", %{"html" => html}, socket) do
+    html =
+      "<html><meta charset='UTF-8'><body><p>Hi ARTÍCULO!</p></body></html>"
+
+    case ChromicPDF.print_to_pdf({:html, html}) do
       {:ok, binary} ->
         {:noreply,
-         socket
-         |> push_event("pdf-export", %{content: Base.encode64(binary)})}
+         push_event(socket, "pdf-export", %{
+           content: binary
+         })}
 
       {:error, reason} ->
-        {:noreply,
-         socket
-         |> put_flash(:error, "Failed to generate PDF: #{reason}")}
+        {:noreply, put_flash(socket, :error, "Failed to generate PDF: #{reason}")}
     end
-
-    {:noreply, socket}
   end
 end
