@@ -34,7 +34,15 @@ defmodule ReglitoWeb.CheckLive do
     """
   end
 
-  def mount(_, _session, socket) do
+  def mount(_, session, socket) do
+    cooperative_name = session["cooperative_name"]
+    registration_number = session["registration_number"]
+
+    socket =
+      socket
+      |> assign(:cooperative_name, cooperative_name)
+      |> assign(:registration_number, registration_number)
+
     {:ok, socket}
   end
 
@@ -44,7 +52,9 @@ defmodule ReglitoWeb.CheckLive do
       |> Base.decode64!()
       |> Jason.decode!()
 
-    form = to_form(%{"articles" => Enum.join(articles, "\n\n")})
+    title = "Reglamento interno de la Cooperativa #{socket.assigns.cooperative_name}"
+
+    form = to_form(%{"articles" => Enum.join([title | articles], "\n\n")})
 
     socket =
       socket
@@ -70,6 +80,8 @@ defmodule ReglitoWeb.CheckLive do
   end
 
   def handle_event("export", %{"articles" => articles}, socket) do
+    cooperative_name = socket.assigns.cooperative_name
+
     articles =
       articles
       |> String.split("\n\n")
@@ -80,7 +92,8 @@ defmodule ReglitoWeb.CheckLive do
       {:ok, binary} ->
         {:noreply,
          push_event(socket, "pdf-export", %{
-           content: binary
+           content: binary,
+           file_name: "reglamento_interno_#{cooperative_name}"
          })}
     end
   end

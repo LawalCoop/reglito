@@ -49,7 +49,7 @@ window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 window.addEventListener("phx:pdf-export", (event) => {
   const a = document.createElement("a");
   a.href = `data:application/pdf;base64,${event.detail.content}`;
-  a.download = "document.pdf";
+  a.download = `${event.detail.file_name}.pdf`;
   a.click();
 })
 
