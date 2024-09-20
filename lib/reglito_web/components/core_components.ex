@@ -204,10 +204,7 @@ defmodule ReglitoWeb.CoreComponents do
     <.form :let={f} class="h-full w-full" for={@for} as={@as} {@rest}>
       <div class="mt-10 space-y-8 bg-white h-full w-full">
         <%= render_slot(@inner_block, f) %>
-        <div
-          :for={action <- @actions}
-          class="mt-2 flex items-center justify-between gap-6 h-full w-full"
-        >
+        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6 w-full">
           <%= render_slot(action, f) %>
         </div>
       </div>
