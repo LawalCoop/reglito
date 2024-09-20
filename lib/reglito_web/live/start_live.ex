@@ -76,10 +76,11 @@ defmodule ReglitoWeb.StartLive do
                 <.icon name="hero-chevron-left" /> Volver
               </button>
               <%= if @is_the_last_one do %>
-                <button class="flex justify-center ite bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
-                  <.link href="/check">
-                    Revisar <.icon name="hero-chevron-right" />
-                  </.link>
+                <button
+                  phx-click="to_check"
+                  class="flex justify-center ite bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+                >
+                  Revisar <.icon name="hero-chevron-right" />
                 </button>
               <% else %>
                 <button
@@ -281,6 +282,13 @@ defmodule ReglitoWeb.StartLive do
       |> assign(:is_the_last_one, false)
 
     {:noreply, socket}
+  end
+
+  def handle_event("to_check", _, socket) do
+    {:noreply,
+     push_navigate(socket,
+       to: "/check?articles=#{Base.encode64(Jason.encode!(socket.assigns.articles))}"
+     )}
   end
 
   defp assign_articles(socket) do

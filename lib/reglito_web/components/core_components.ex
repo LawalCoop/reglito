@@ -201,10 +201,13 @@ defmodule ReglitoWeb.CoreComponents do
 
   def simple_form(assigns) do
     ~H"""
-    <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+    <.form :let={f} class="h-full w-full" for={@for} as={@as} {@rest}>
+      <div class="mt-10 space-y-8 bg-white h-full w-full">
         <%= render_slot(@inner_block, f) %>
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
+        <div
+          :for={action <- @actions}
+          class="mt-2 flex items-center justify-between gap-6 h-full w-full"
+        >
           <%= render_slot(action, f) %>
         </div>
       </div>
@@ -349,13 +352,13 @@ defmodule ReglitoWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div class="h-full" phx-feedback-for={@name}>
       <.label for={@id}><%= @label %></.label>
       <textarea
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "h-full mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
