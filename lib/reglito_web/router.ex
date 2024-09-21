@@ -19,6 +19,7 @@ defmodule ReglitoWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/health", PageController, :check
     get "/info", PageController, :info
 
     live_session :live do

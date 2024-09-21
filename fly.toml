@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for reglito on 2024-09-09T09:38:48-03:00
+# fly.toml app configuration file generated for reglito on 2024-09-21T11:26:34-03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -30,6 +30,6 @@ kill_signal = 'SIGTERM'
     soft_limit = 1000
 
 [[vm]]
-  memory = '512mb'
+  memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
