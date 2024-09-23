@@ -76,7 +76,7 @@
             ],
             "result_template": "Cada una de ellas tendrá un/a coordinador/a designado/a por el Consejo de Administración por el tiempo que este determine"
           },
-          "result_template": "ARTICULO {NUMBER}: La cooperativa se distribuirá en las siguientes áreas, {OPTIONS}. {RELATED_QUESTION}. El Consejo podrá a su vez, modificar las áreas de la cooperativa así como todo el articulado de esta sección sin necesidad de reforma del reglamento toda vez que son cuestiones de mera organización interna."
+          "result_template": "ARTICULO {NUMBER}: La cooperativa se distribuirá en las siguientes áreas, {OPTIONS}. {RELATED_QUESTION} El Consejo podrá a su vez, modificar las áreas de la cooperativa así como todo el articulado de esta sección sin necesidad de reforma del reglamento toda vez que son cuestiones de mera organización interna."
         }
       ]
     }

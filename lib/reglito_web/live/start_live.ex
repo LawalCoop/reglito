@@ -53,7 +53,9 @@ defmodule ReglitoWeb.StartLive do
                     <p>
                       <input
                         checked={
-                          Enum.any?(@aswer, fn selected_option -> selected_option == option end)
+                          Enum.any?(@related_question_aswer, fn selected_option ->
+                            selected_option == option
+                          end)
                         }
                         phx-click="related_option_selected"
                         type="checkbox"
@@ -226,7 +228,7 @@ defmodule ReglitoWeb.StartLive do
         socket
       ) do
     selection_type = aswer_type(socket.assigns.sections, socket.assigns.current_section_index)
-    aswer = socket.assigns.aswer
+    aswer = socket.assigns.related_question_aswer
 
     aswer =
       if selection_type == "exclusive" do
@@ -339,7 +341,8 @@ defmodule ReglitoWeb.StartLive do
         end
 
       "multiple_with_exclusive" ->
-        has_related_question_aswer = !Enum.empty?(related_question_aswer)
+        has_related_question_aswer =
+          !Enum.empty?(related_question_aswer) && related_question_aswer != "NO"
 
         template =
           template
