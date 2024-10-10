@@ -29,18 +29,36 @@ defmodule ReglitoWeb.StartLive do
               <%= question(@sections, @current_section_index) %>
             </p>
             <div>
-              <%= for option <- options(@sections, @current_section_index) do %>
-                <p>
-                  <input
-                    checked={Enum.any?(@aswer, fn selected_option -> selected_option == option end)}
-                    phx-click="option_selected"
-                    type="checkbox"
-                    name={option}
-                    id={option}
-                    phx-value-option-selected={option}
-                  />
-                  <%= option %>
-                </p>
+              <%= case aswer_type(@sections, @current_section_index) do %>
+                <% "refillable" -> %>
+                  <.simple_form for={@refillable_form} phx-change="form_changed">
+                    <%= for {option, i} <- Enum.with_index(options(@sections, @current_section_index)) do %>
+                      <p>
+                        <.input
+                          type="text"
+                          label={option}
+                          id={option}
+                          field={@refillable_form["option_#{i}"]}
+                        />
+                      </p>
+                    <% end %>
+                  </.simple_form>
+                <% _ -> %>
+                  <%= for option <- options(@sections, @current_section_index) do %>
+                    <p>
+                      <input
+                        checked={
+                          Enum.any?(@aswer, fn selected_option -> selected_option == option end)
+                        }
+                        phx-click="option_selected"
+                        type="checkbox"
+                        name={option}
+                        id={option}
+                        phx-value-option-selected={option}
+                      />
+                      <%= option %>
+                    </p>
+                  <% end %>
               <% end %>
             </div>
             <%= if not is_nil(related_question(@sections, @current_section_index)) do %>
@@ -259,6 +277,11 @@ defmodule ReglitoWeb.StartLive do
       end
 
     socket =
+      if aswer_type(sections, new_index) == "refillable",
+        do: assign(socket, :refillable_form, to_form(%{"option_1" => ""})),
+        else: socket
+
+    socket =
       socket
       |> assign(:current_section_index, new_index)
       |> assign(:aswer, [])
@@ -291,6 +314,20 @@ defmodule ReglitoWeb.StartLive do
      push_navigate(socket,
        to: "/check?articles=#{Base.encode64(Jason.encode!(socket.assigns.articles))}"
      )}
+  end
+
+  def handle_event("form_changed", params, socket) do
+    aswer =
+      params
+      |> Map.delete("_target")
+      |> Map.values()
+
+    socket =
+      socket
+      |> assign(:aswer, aswer)
+      |> assign_articles()
+
+    {:noreply, socket}
   end
 
   defp assign_articles(socket) do
@@ -358,6 +395,12 @@ defmodule ReglitoWeb.StartLive do
           template
           |> String.replace("{RELATED_QUESTION}", "")
         end
+
+      "refillable" ->
+        Enum.reduce(aswer, template, fn a, acc ->
+          String.replace(acc, "{ASWER}", a, global: false)
+        end)
+        |> String.replace("{NUMBER}", to_string(article_number))
     end
   end
 
