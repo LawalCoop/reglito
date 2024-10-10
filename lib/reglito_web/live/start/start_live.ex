@@ -2,25 +2,20 @@ defmodule ReglitoWeb.StartLive do
   use ReglitoWeb, :live_view
 
   alias Reglito.Chapters
+  alias ReglitoWeb.Start.Components.QuestionViewer
 
   import ReglitoWeb.Start.Helpers
   import ReglitoWeb.Start.Components.Header
-  import ReglitoWeb.Start.Components.QuestionViewer
   import ReglitoWeb.Start.Components.ArticlesViewer
 
   def render(assigns) do
     ~H"""
     <div class="flex flex-col h-full w-full">
-      <.page_info sections={@sections} current_section_index={@current_section_index} />
+      <.page_info sections={@sections} current_section_index={0} />
 
       <div class="flex">
         <div class="w-1/2 h-full flex pl-20">
-          <.question_viewer
-            sections={@sections}
-            current_section_index={@current_section_index}
-            is_the_last_one={@is_the_last_one}
-            aswer={@aswer}
-          />
+          <.live_component module={QuestionViewer} id="question_viewer" sections={@sections} />
         </div>
         <div class="w-1/2 h-full overflow-y-scroll m-5 p-5 bg-gray-100 rounded-xl">
           <.articles_viewer articles={@articles} />
@@ -36,14 +31,9 @@ defmodule ReglitoWeb.StartLive do
       |> Chapters.selected_chapters_data()
       |> Chapters.all_sections()
 
-    start_index = 0
-
     socket =
       socket
-      |> assign(:is_the_last_one, false)
       |> assign(:sections, sections)
-      |> assign(:current_section_index, start_index)
-      |> assign(:aswer, [])
       |> assign(:related_question_aswer, [])
       |> assign(:articles, [])
 
@@ -56,21 +46,21 @@ defmodule ReglitoWeb.StartLive do
         socket
       ) do
     selection_type = aswer_type(socket.assigns.sections, socket.assigns.current_section_index)
-    aswer = socket.assigns.aswer
+    current_aswer = socket.assigns.aswer
 
-    aswer =
+    new_aswer =
       if selection_type == "exclusive" do
         [option_selected]
       else
         [
           option_selected
-          | aswer
+          | current_aswer
         ]
       end
 
     socket =
       socket
-      |> assign(:aswer, aswer)
+      |> assign(:current_aswer, new_aswer)
       |> assign_articles()
 
     {:noreply, socket}
@@ -82,20 +72,20 @@ defmodule ReglitoWeb.StartLive do
         socket
       ) do
     selection_type = aswer_type(socket.assigns.sections, socket.assigns.current_section_index)
-    aswer = socket.assigns.aswer
+    current_aswer = socket.assigns.current_aswer
 
-    aswer =
+    new_aswer =
       if selection_type == "exclusive" do
         []
       else
-        Enum.reject(aswer, fn option_selected ->
+        Enum.reject(current_aswer, fn option_selected ->
           option_selected == option_to_remove
         end)
       end
 
     socket =
       socket
-      |> assign(:aswer, aswer)
+      |> assign(:current_aswer, new_aswer)
       |> assign_articles()
 
     {:noreply, socket}
@@ -107,21 +97,21 @@ defmodule ReglitoWeb.StartLive do
         socket
       ) do
     selection_type = aswer_type(socket.assigns.sections, socket.assigns.current_section_index)
-    aswer = socket.assigns.aswer
+    current_aswer = socket.assigns.current_aswer
 
-    aswer =
+    new_aswer =
       if selection_type == "exclusive" do
         [option_selected]
       else
         [
           option_selected
-          | aswer
+          | current_aswer
         ]
       end
 
     socket =
       socket
-      |> assign(:related_question_aswer, aswer)
+      |> assign(:related_question_aswer, new_aswer)
       |> assign_articles()
 
     {:noreply, socket}
@@ -150,57 +140,6 @@ defmodule ReglitoWeb.StartLive do
       |> assign_articles()
 
     {:noreply, socket}
-  end
-
-  def handle_event("next_section", _, socket) do
-    current_section_index = socket.assigns.current_section_index
-    sections = socket.assigns.sections
-
-    new_index =
-      if current_section_index + 1 >= length(sections) do
-        current_section_index
-      else
-        current_section_index + 1
-      end
-
-    socket =
-      if aswer_type(sections, new_index) == "refillable",
-        do: assign(socket, :refillable_form, to_form(%{"option_1" => ""})),
-        else: socket
-
-    socket =
-      socket
-      |> assign(:current_section_index, new_index)
-      |> assign(:aswer, [])
-      |> assign(:is_the_last_one, length(sections) == new_index + 1)
-
-    {:noreply, socket}
-  end
-
-  def handle_event("previous_section", _, socket) do
-    current_section_index = socket.assigns.current_section_index
-
-    new_index =
-      if current_section_index - 1 <= 0 do
-        current_section_index
-      else
-        current_section_index + 1
-      end
-
-    socket =
-      socket
-      |> assign(:current_section_index, new_index)
-      |> assign(:aswer, [])
-      |> assign(:is_the_last_one, false)
-
-    {:noreply, socket}
-  end
-
-  def handle_event("to_check", _, socket) do
-    {:noreply,
-     push_navigate(socket,
-       to: "/check?articles=#{Base.encode64(Jason.encode!(socket.assigns.articles))}"
-     )}
   end
 
   def handle_event("form_changed", params, socket) do
