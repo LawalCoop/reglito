@@ -18,4 +18,18 @@ defmodule Reglito.Chapters do
         into: %{},
         do: {code, name}
   end
+
+  def selected_chapters_data(selected_chapers_keys) do
+    read_chapters_data()
+    |> Enum.filter(fn {key, _value} -> key in selected_chapers_keys end)
+    |> Enum.into(%{})
+  end
+
+  def all_sections(chapters) do
+    Enum.flat_map(chapters, fn {chapter_key, %{"sections" => sections}} ->
+      Enum.map(sections, fn section ->
+        Map.put(section, "chapter", chapter_key)
+      end)
+    end)
+  end
 end

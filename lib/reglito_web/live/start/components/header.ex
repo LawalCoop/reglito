@@ -18,11 +18,15 @@ defmodule ReglitoWeb.Start.Components.Header do
       <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-300">
         <div
           class="bg-blue-600 h-2.5 rounded-full"
-          style={"width: #{@progress_multiplier  * (@current_section_index + 1)}%"}
+          style={"width: #{progress_multiplier(@sections)  * (@current_section_index + 1)}%"}
         >
         </div>
       </div>
     </div>
     """
+  end
+
+  defp progress_multiplier(sections) do
+    100 / length(sections)
   end
 end

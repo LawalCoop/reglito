@@ -11,11 +11,7 @@ defmodule ReglitoWeb.StartLive do
   def render(assigns) do
     ~H"""
     <div class="flex flex-col h-full w-full">
-      <.page_info
-        sections={@sections}
-        current_section_index={@current_section_index}
-        progress_multiplier={@progress_multiplier}
-      />
+      <.page_info sections={@sections} current_section_index={@current_section_index} />
 
       <div class="flex">
         <div class="w-1/2 h-full flex pl-20">
@@ -35,27 +31,15 @@ defmodule ReglitoWeb.StartLive do
   end
 
   def mount(%{"selected_chapters" => selected_chapters}, _session, socket) do
-    chapters = Chapters.read_chapters_data()
-
-    chapters =
-      chapters
-      |> Enum.filter(fn {key, _value} -> key in selected_chapters end)
-      |> Enum.into(%{})
-
     sections =
-      chapters
-      |> Enum.flat_map(fn {chapter_key, %{"sections" => sections}} ->
-        Enum.map(sections, fn section ->
-          Map.put(section, "chapter", chapter_key)
-        end)
-      end)
+      selected_chapters
+      |> Chapters.selected_chapters_data()
+      |> Chapters.all_sections()
 
-    progress_multiplier = 100 / length(sections)
     start_index = 0
 
     socket =
       socket
-      |> assign(:progress_multiplier, progress_multiplier)
       |> assign(:is_the_last_one, false)
       |> assign(:sections, sections)
       |> assign(:current_section_index, start_index)
