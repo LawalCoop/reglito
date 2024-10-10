@@ -1,6 +1,7 @@
 defmodule ReglitoWeb.Start.Components.Header do
-  alias Reglito.Chapters
   use Phoenix.Component
+
+  alias Reglito.Chapters
 
   import ReglitoWeb.Start.Helpers
 

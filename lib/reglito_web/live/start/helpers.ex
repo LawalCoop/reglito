@@ -7,4 +7,24 @@ defmodule ReglitoWeb.Start.Helpers do
     current_section(sections, index)
     |> Map.fetch!("chapter")
   end
+
+  def question(sections, index) do
+    current_section(sections, index)
+    |> Map.fetch!("question")
+  end
+
+  def options(sections, index) do
+    current_section(sections, index)
+    |> Map.fetch!("options")
+  end
+
+  def aswer_type(sections, index) do
+    current_section(sections, index)
+    |> Map.fetch!("aswer_type")
+  end
+
+  def related_question(sections, index) do
+    current_section(sections, index)
+    |> Map.get("related_question")
+  end
 end

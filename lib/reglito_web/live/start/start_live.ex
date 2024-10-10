@@ -5,6 +5,8 @@ defmodule ReglitoWeb.StartLive do
 
   import ReglitoWeb.Start.Helpers
   import ReglitoWeb.Start.Components.Header
+  import ReglitoWeb.Start.Components.QuestionViewer
+  import ReglitoWeb.Start.Components.ArticlesViewer
 
   def render(assigns) do
     ~H"""
@@ -17,101 +19,15 @@ defmodule ReglitoWeb.StartLive do
 
       <div class="flex">
         <div class="w-1/2 h-full flex pl-20">
-          <div class="flex flex-col w-full items-start pt-16">
-            <p class="font-bold text-2xl mb-5">
-              <%= question(@sections, @current_section_index) %>
-            </p>
-            <div>
-              <%= case aswer_type(@sections, @current_section_index) do %>
-                <% "refillable" -> %>
-                  <.simple_form for={@refillable_form} phx-change="form_changed">
-                    <%= for {option, i} <- Enum.with_index(options(@sections, @current_section_index)) do %>
-                      <p>
-                        <.input
-                          type="text"
-                          label={option}
-                          id={option}
-                          field={@refillable_form["option_#{i}"]}
-                        />
-                      </p>
-                    <% end %>
-                  </.simple_form>
-                <% _ -> %>
-                  <%= for option <- options(@sections, @current_section_index) do %>
-                    <p>
-                      <input
-                        checked={
-                          Enum.any?(@aswer, fn selected_option -> selected_option == option end)
-                        }
-                        phx-click="option_selected"
-                        type="checkbox"
-                        name={option}
-                        id={option}
-                        phx-value-option-selected={option}
-                      />
-                      <%= option %>
-                    </p>
-                  <% end %>
-              <% end %>
-            </div>
-            <%= if not is_nil(related_question(@sections, @current_section_index)) do %>
-              <div class="mt-2">
-                <p class="font-bold text-2xl mb-2">
-                  <%= related_question(@sections, @current_section_index)["question"] %>
-                </p>
-                <div>
-                  <%= for option <- related_question(@sections, @current_section_index)["options"] do %>
-                    <p>
-                      <input
-                        checked={
-                          Enum.any?(@related_question_aswer, fn selected_option ->
-                            selected_option == option
-                          end)
-                        }
-                        phx-click="related_option_selected"
-                        type="checkbox"
-                        name={option}
-                        id={option}
-                        phx-value-option-selected={option}
-                      />
-                      <%= option %>
-                    </p>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-
-            <div class="w-full flex justify-between mt-5">
-              <button
-                phx-click="previous_section"
-                class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
-              >
-                <.icon name="hero-chevron-left" /> Volver
-              </button>
-              <%= if @is_the_last_one do %>
-                <button
-                  phx-click="to_check"
-                  class="flex justify-center ite bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
-                >
-                  Revisar <.icon name="hero-chevron-right" />
-                </button>
-              <% else %>
-                <button
-                  phx-click="next_section"
-                  class="flex justify-center ite bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
-                >
-                  Siguiente <.icon name="hero-chevron-right" />
-                </button>
-              <% end %>
-            </div>
-          </div>
+          <.question_viewer
+            sections={@sections}
+            current_section_index={@current_section_index}
+            is_the_last_one={@is_the_last_one}
+            aswer={@aswer}
+          />
         </div>
         <div class="w-1/2 h-full overflow-y-scroll m-5 p-5 bg-gray-100 rounded-xl">
-          <div class="w-full flex flex-col justify-center">
-            <%= for {article, i} <- Enum.with_index(@articles) do %>
-              <p id={"#{i}"}><%= article %></p>
-            <% end %>
-          </div>
+          <.articles_viewer articles={@articles} />
         </div>
       </div>
     </div>
@@ -389,25 +305,5 @@ defmodule ReglitoWeb.StartLive do
         end)
         |> String.replace("{NUMBER}", to_string(article_number))
     end
-  end
-
-  defp question(sections, index) do
-    current_section(sections, index)
-    |> Map.fetch!("question")
-  end
-
-  defp options(sections, index) do
-    current_section(sections, index)
-    |> Map.fetch!("options")
-  end
-
-  defp aswer_type(sections, index) do
-    current_section(sections, index)
-    |> Map.fetch!("aswer_type")
-  end
-
-  defp related_question(sections, index) do
-    current_section(sections, index)
-    |> Map.get("related_question")
   end
 end
