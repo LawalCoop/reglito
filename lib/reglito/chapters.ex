@@ -12,4 +12,10 @@ defmodule Reglito.Chapters do
   def read_chapters_data() do
     @chapters_data
   end
+
+  def chapter_name_by_code() do
+    for %{"code" => code, "name" => name} <- read_chapters_description(),
+        into: %{},
+        do: {code, name}
+  end
 end

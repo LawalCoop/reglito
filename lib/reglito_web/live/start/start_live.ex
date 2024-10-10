@@ -1,26 +1,19 @@
 defmodule ReglitoWeb.StartLive do
-  alias Reglito.Chapters
   use ReglitoWeb, :live_view
+
+  alias Reglito.Chapters
+
+  import ReglitoWeb.Start.Helpers
+  import ReglitoWeb.Start.Components.Header
 
   def render(assigns) do
     ~H"""
     <div class="flex flex-col h-full w-full">
-      <div class="px-20">
-        <div class="p-4">
-          <p class="">Reglamento interno de:</p>
-          <p class="text-xl font-bold">Lawal Cooperativa Tecnologica Ltda.</p>
-        </div>
-        <p class="font-bold mb-2">
-          Capitulo: <%= @chapter_name_by_code[chapter(@sections, @current_section_index)] %>
-        </p>
-        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-300">
-          <div
-            class="bg-blue-600 h-2.5 rounded-full"
-            style={"width: #{@progress_multiplier  * (@current_section_index + 1)}%"}
-          >
-          </div>
-        </div>
-      </div>
+      <.page_info
+        sections={@sections}
+        current_section_index={@current_section_index}
+        progress_multiplier={@progress_multiplier}
+      />
 
       <div class="flex">
         <div class="w-1/2 h-full flex pl-20">
@@ -128,11 +121,6 @@ defmodule ReglitoWeb.StartLive do
   def mount(%{"selected_chapters" => selected_chapters}, _session, socket) do
     chapters = Chapters.read_chapters_data()
 
-    chapter_name_by_code =
-      for %{"code" => code, "name" => name} <- Chapters.read_chapters_description(),
-          into: %{},
-          do: {code, name}
-
     chapters =
       chapters
       |> Enum.filter(fn {key, _value} -> key in selected_chapters end)
@@ -158,7 +146,6 @@ defmodule ReglitoWeb.StartLive do
       |> assign(:aswer, [])
       |> assign(:related_question_aswer, [])
       |> assign(:articles, [])
-      |> assign(:chapter_name_by_code, chapter_name_by_code)
 
     {:ok, socket}
   end
@@ -404,10 +391,6 @@ defmodule ReglitoWeb.StartLive do
     end
   end
 
-  defp current_section(sections, index) do
-    Enum.at(sections, index)
-  end
-
   defp question(sections, index) do
     current_section(sections, index)
     |> Map.fetch!("question")
@@ -421,11 +404,6 @@ defmodule ReglitoWeb.StartLive do
   defp aswer_type(sections, index) do
     current_section(sections, index)
     |> Map.fetch!("aswer_type")
-  end
-
-  defp chapter(sections, index) do
-    current_section(sections, index)
-    |> Map.fetch!("chapter")
   end
 
   defp related_question(sections, index) do
