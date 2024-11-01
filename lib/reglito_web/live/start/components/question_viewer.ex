@@ -11,7 +11,8 @@ defmodule ReglitoWeb.Start.Components.QuestionViewer do
       <.user_inputs
         sections={@sections}
         current_section_index={@current_section_index}
-        current_aswer={@current_aswer}
+        aswers={@aswers}
+        target={@myself}
       />
       <.buttons is_the_last_one={@is_the_last_one} target={@myself} />
     </div>
@@ -23,9 +24,9 @@ defmodule ReglitoWeb.Start.Components.QuestionViewer do
       socket
       |> assign(:sections, assigns.sections)
       |> assign(:current_section_index, 0)
-      |> assign(:current_aswer, [])
       |> assign(:is_the_last_one, false)
-      |> assign(:aswers, [])
+      |> assign(:aswers, [%{aswer: [], template: ""}])
+      |> assign(:form, to_form(%{}))
 
     {:ok, socket}
   end
@@ -72,6 +73,17 @@ defmodule ReglitoWeb.Start.Components.QuestionViewer do
      )}
   end
 
+  def handle_event("user_aswer_check_box", params, socket) do
+    aswers = socket.assigns.aswers
+    current_section_index = socket.assigns.current_section_index
+
+    awsers_updated =
+      update_or_insert(aswers, current_section_index, %{aswer: [], template: ""})
+      |> IO.inspect(label: "AAA")
+
+    {:noreply, assign(socket, :aswers, awsers_updated)}
+  end
+
   #
   # COMPONENTS
   #
@@ -89,27 +101,29 @@ defmodule ReglitoWeb.Start.Components.QuestionViewer do
     <div>
       <%= case aswer_type(@sections, @current_section_index) do %>
         <% "refillable" -> %>
-          <.simple_form for={@refillable_form} phx-change="user_aswer_form">
+          <.simple_form for={@form} phx-change="user_aswer_form">
             <%= for {option, i} <- Enum.with_index(options(@sections, @current_section_index)) do %>
               <p>
-                <.input
-                  type="text"
-                  label={option}
-                  id={option}
-                  field={@refillable_form["option_#{i}"]}
-                />
+                <.input type="text" label={option} id={option} field={@form["option_#{i}"]} />
               </p>
             <% end %>
           </.simple_form>
         <% _ -> %>
+          <.simple_form for={@form} phx-change="user_aswer_check_box">
+            <%= for option <- options(@sections, @current_section_index) do %>
+              <p>
+                <.input id={option} phx-target={@target} name={option} type="checkbox" />
+              </p>
+            <% end %>
+          </.simple_form>
           <%= for option <- options(@sections, @current_section_index) do %>
             <p>
               <input
-                checked={checked?(@current_aswer, option)}
-                phx-click="user_aswer_check_box"
-                type="checkbox"
-                name={option}
                 id={option}
+                phx-target={@target}
+                name={option}
+                type="checkbox"
+                phx-click="user_aswer_check_box"
                 phx-value-option-selected={option}
               />
               <%= option %>
@@ -186,8 +200,15 @@ defmodule ReglitoWeb.Start.Components.QuestionViewer do
   #
   # HELPERS
   #
+  def update_or_insert(list, index, value) when is_list(list) and is_integer(index) do
+    list_length = length(list)
 
-  def checked?(current_aswer, option) do
-    Enum.any?(current_aswer, fn selected_option -> selected_option == option end)
+    cond do
+      index < list_length ->
+        List.replace_at(list, index, value)
+
+      index >= list_length ->
+        list ++ List.duplicate(nil, index - list_length) ++ [value]
+    end
   end
 end
