@@ -61,7 +61,6 @@ defmodule ReglitoWeb.StartLive do
     socket =
       socket
       |> assign(:current_aswer, new_aswer)
-      |> assign_articles()
 
     {:noreply, socket}
   end
@@ -86,7 +85,6 @@ defmodule ReglitoWeb.StartLive do
     socket =
       socket
       |> assign(:current_aswer, new_aswer)
-      |> assign_articles()
 
     {:noreply, socket}
   end
@@ -112,7 +110,6 @@ defmodule ReglitoWeb.StartLive do
     socket =
       socket
       |> assign(:related_question_aswer, new_aswer)
-      |> assign_articles()
 
     {:noreply, socket}
   end
@@ -137,7 +134,6 @@ defmodule ReglitoWeb.StartLive do
     socket =
       socket
       |> assign(:related_question_aswer, aswer)
-      |> assign_articles()
 
     {:noreply, socket}
   end
@@ -151,82 +147,63 @@ defmodule ReglitoWeb.StartLive do
     socket =
       socket
       |> assign(:aswer, aswer)
-      |> assign_articles()
 
     {:noreply, socket}
   end
 
-  defp assign_articles(socket) do
-    articles = socket.assigns.articles
-    sections = socket.assigns.sections
-    current_section_index = socket.assigns.current_section_index
-    aswer = socket.assigns.aswer
-    related_question_aswer = socket.assigns.related_question_aswer
-    current_section = current_section(sections, current_section_index)
+  def handle_info({:awsers_updated, %{answers_updated: answers_updated}}, socket) do
+    socket =
+      socket
+      |> assign(:articles, generate_articles(answers_updated))
 
-    article_number =
-      if length(articles) < current_section_index,
-        do: length(articles) + 1,
-        else: current_section_index + 1
-
-    new_rule_already_exist =
-      !is_nil(Enum.at(articles, current_section_index))
-
-    rule = fill_template(current_section, aswer, related_question_aswer, article_number)
-
-    new_articles =
-      if new_rule_already_exist do
-        List.replace_at(articles, current_section_index, rule)
-      else
-        articles ++ [rule]
-      end
-
-    socket
-    |> assign(:articles, new_articles)
+    {:noreply, socket}
   end
 
-  defp fill_template(current_section, aswer, related_question_aswer, article_number) do
-    template = current_section["result_template"]
-
-    case current_section["aswer_type"] do
-      "multiple" ->
-        template
-        |> String.replace("{COOPERATIVE}", "Lawal Cooperativa Tecnologica")
-        |> String.replace("{OPTIONS}", Enum.join(Enum.reverse(aswer), ", "))
-        |> String.replace("{NUMBER}", to_string(article_number))
-
-      "exclusive" ->
-        if aswer == ["SI"] do
-          template
-          |> String.replace("{NUMBER}", to_string(article_number))
-        else
-          nil
-        end
-
-      "multiple_with_exclusive" ->
-        has_related_question_aswer =
-          !Enum.empty?(related_question_aswer) && related_question_aswer != "NO"
-
-        template =
-          template
-          |> String.replace("{OPTIONS}", Enum.join(Enum.reverse(aswer), ", "))
+  defp generate_articles(aswers) do
+    aswers
+    |> Enum.with_index(1)
+    |> Enum.map(fn {user_input, article_number} ->
+      case user_input.answer_type do
+        "multiple" ->
+          user_input.template
+          # TODO: usar la información que nos dió el usuario
+          |> String.replace("{COOPERATIVE}", "Lawal Cooperativa Tecnologica")
+          |> String.replace("{OPTIONS}", Enum.join(Enum.reverse(user_input.answer), ", "))
           |> String.replace("{NUMBER}", to_string(article_number))
 
-        if has_related_question_aswer do
-          related_question_template = current_section["related_question"]["result_template"]
+        "exclusive" ->
+          if user_input.aswer == ["SI"] do
+            user_input.template
+            |> String.replace("{NUMBER}", to_string(article_number))
+          else
+            nil
+          end
 
-          template
-          |> String.replace("{RELATED_QUESTION}", related_question_template)
-        else
-          template
-          |> String.replace("{RELATED_QUESTION}", "")
-        end
+        # "multiple_with_exclusive" ->
+        #   has_related_question_aswer =
+        #     !Enum.empty?(related_question_aswer) && related_question_aswer != "NO"
 
-      "refillable" ->
-        Enum.reduce(aswer, template, fn a, acc ->
-          String.replace(acc, "{ASWER}", a, global: false)
-        end)
-        |> String.replace("{NUMBER}", to_string(article_number))
-    end
+        #   template =
+        #     user_input.template
+        #     |> String.replace("{OPTIONS}", Enum.join(Enum.reverse(user_input.aswer), ", "))
+        #     |> String.replace("{NUMBER}", to_string(article_number))
+
+        #   if has_related_question_aswer do
+        #     related_question_template = current_section["related_question"]["result_template"]
+
+        #     template
+        #     |> String.replace("{RELATED_QUESTION}", related_question_template)
+        #   else
+        #     template
+        #     |> String.replace("{RELATED_QUESTION}", "")
+        #   end
+
+        "refillable" ->
+          Enum.reduce(user_input.aswer, user_input.template, fn a, acc ->
+            String.replace(acc, "{ASWER}", a, global: false)
+          end)
+          |> String.replace("{NUMBER}", to_string(article_number))
+      end
+    end)
   end
 end

@@ -6,13 +6,14 @@ defmodule ReglitoWeb.Start.Components.QuestionViewer do
 
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col w-full items-start pt-16">
+    <div class="flex flex-col w-full pt-10">
       <.question sections={@sections} current_section_index={@current_section_index} />
       <.user_inputs
         sections={@sections}
         current_section_index={@current_section_index}
-        aswers={@aswers}
+        answers={@answers}
         target={@myself}
+        form={@form}
       />
       <.buttons is_the_last_one={@is_the_last_one} target={@myself} />
     </div>
@@ -25,7 +26,7 @@ defmodule ReglitoWeb.Start.Components.QuestionViewer do
       |> assign(:sections, assigns.sections)
       |> assign(:current_section_index, 0)
       |> assign(:is_the_last_one, false)
-      |> assign(:aswers, [%{aswer: [], template: ""}])
+      |> assign(:answers, [%{answer: [], aswer_type: "", template: ""}])
       |> assign(:form, to_form(%{}))
 
     {:ok, socket}
@@ -74,14 +75,29 @@ defmodule ReglitoWeb.Start.Components.QuestionViewer do
   end
 
   def handle_event("user_aswer_check_box", params, socket) do
-    aswers = socket.assigns.aswers
-    current_section_index = socket.assigns.current_section_index
+    answers = socket.assigns.answers
 
-    awsers_updated =
-      update_or_insert(aswers, current_section_index, %{aswer: [], template: ""})
-      |> IO.inspect(label: "AAA")
+    current_section_index =
+      socket.assigns.current_section_index
 
-    {:noreply, assign(socket, :aswers, awsers_updated)}
+    current_section = current_section(socket.assigns.sections, current_section_index)
+
+    user_input =
+      params
+      |> Map.delete("_target")
+      |> Enum.filter(fn {_key, value} -> value == "true" end)
+      |> Enum.map(fn {key, _value} -> key end)
+
+    answers_updated =
+      update_or_insert(answers, current_section_index, %{
+        answer: user_input,
+        answer_type: current_section["aswer_type"],
+        template: current_section["result_template"]
+      })
+
+    send(self(), {:awsers_updated, %{answers_updated: answers_updated}})
+
+    {:noreply, assign(socket, :answers, answers_updated)}
   end
 
   #
@@ -99,39 +115,28 @@ defmodule ReglitoWeb.Start.Components.QuestionViewer do
   defp user_inputs(assigns) do
     ~H"""
     <div>
-      <%= case aswer_type(@sections, @current_section_index) do %>
-        <% "refillable" -> %>
-          <.simple_form for={@form} phx-change="user_aswer_form">
-            <%= for {option, i} <- Enum.with_index(options(@sections, @current_section_index)) do %>
-              <p>
-                <.input type="text" label={option} id={option} field={@form["option_#{i}"]} />
-              </p>
-            <% end %>
-          </.simple_form>
-        <% _ -> %>
-          <.simple_form for={@form} phx-change="user_aswer_check_box">
-            <%= for option <- options(@sections, @current_section_index) do %>
-              <p>
-                <.input id={option} phx-target={@target} name={option} type="checkbox" />
-              </p>
-            <% end %>
-          </.simple_form>
-          <%= for option <- options(@sections, @current_section_index) do %>
-            <p>
-              <input
-                id={option}
-                phx-target={@target}
-                name={option}
-                type="checkbox"
-                phx-click="user_aswer_check_box"
-                phx-value-option-selected={option}
-              />
-              <%= option %>
-            </p>
-          <% end %>
-      <% end %>
+      <div>
+        <%= case aswer_type(@sections, @current_section_index) do %>
+          <% "refillable" -> %>
+            <.simple_form for={@form} phx-change="user_aswer_form" target={@target}>
+              <%= for {option, i} <- Enum.with_index(options(@sections, @current_section_index)) do %>
+                <p>
+                  <.input type="text" label={option} id={option} field={@form["option_#{i}"]} />
+                </p>
+              <% end %>
+            </.simple_form>
+          <% _ -> %>
+            <.simple_form for={@form} phx-change="user_aswer_check_box" phx-target={@target}>
+              <%= for option <- options(@sections, @current_section_index) do %>
+                <p>
+                  <.input id={option} name={option} type="checkbox" label={option} />
+                </p>
+              <% end %>
+            </.simple_form>
+        <% end %>
+      </div>
+      <.related_question sections={@sections} current_section_index={@current_section_index} />
     </div>
-    <.related_question sections={@sections} current_section_index={@current_section_index} />
     """
   end
 
