@@ -26,7 +26,7 @@ defmodule ReglitoWeb.Start.Components.QuestionViewer do
       |> assign(:sections, assigns.sections)
       |> assign(:current_section_index, 0)
       |> assign(:is_the_last_one, false)
-      |> assign(:answers, [%{answer: [], aswer_type: "", template: ""}])
+      |> assign(:answers, [])
       |> assign(:form, to_form(%{}))
 
     {:ok, socket}
@@ -89,11 +89,15 @@ defmodule ReglitoWeb.Start.Components.QuestionViewer do
       |> Enum.map(fn {key, _value} -> key end)
 
     answers_updated =
-      update_or_insert(answers, current_section_index, %{
-        answer: user_input,
-        answer_type: current_section["aswer_type"],
-        template: current_section["result_template"]
-      })
+      if Enum.empty?(user_input) do
+        List.delete_at(answers, current_section_index)
+      else
+        update_or_insert(answers, current_section_index, %{
+          answer: user_input,
+          answer_type: current_section["aswer_type"],
+          template: current_section["result_template"]
+        })
+      end
 
     send(self(), {:awsers_updated, %{answers_updated: answers_updated}})
 

@@ -161,15 +161,20 @@ defmodule ReglitoWeb.StartLive do
 
   defp generate_articles(aswers) do
     aswers
+    |> Enum.filter(fn answer -> !is_nil(answer) end)
     |> Enum.with_index(1)
     |> Enum.map(fn {user_input, article_number} ->
       case user_input.answer_type do
         "multiple" ->
-          user_input.template
-          # TODO: usar la información que nos dió el usuario
-          |> String.replace("{COOPERATIVE}", "Lawal Cooperativa Tecnologica")
-          |> String.replace("{OPTIONS}", Enum.join(Enum.reverse(user_input.answer), ", "))
-          |> String.replace("{NUMBER}", to_string(article_number))
+          if Enum.empty?(user_input.answer) do
+            nil
+          else
+            user_input.template
+            # TODO: usar la información que nos dió el usuario
+            |> String.replace("{COOPERATIVE}", "Lawal Cooperativa Tecnologica")
+            |> String.replace("{OPTIONS}", Enum.join(user_input.answer, ", "))
+            |> String.replace("{NUMBER}", to_string(article_number))
+          end
 
         "exclusive" ->
           if user_input.aswer == ["SI"] do
