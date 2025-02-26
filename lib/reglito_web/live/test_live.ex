@@ -1,5 +1,4 @@
 defmodule ReglitoWeb.TestLive do
-  alias Reglito.Question
   alias Reglito.Template
   use ReglitoWeb, :live_view
 
@@ -13,7 +12,7 @@ defmodule ReglitoWeb.TestLive do
     <div class="mx-40 my-10">
       <.form for={@form} phx-change="validate" phx-submit="save">
         <.nested_answer_inputs form={@form} questions={@questions} />
-        <.button>Save</.button>
+        <.button>Siguiente</.button>
       </.form>
 
       <%= for {res, index} <- Enum.with_index(@result, 1) do %>
@@ -38,9 +37,20 @@ defmodule ReglitoWeb.TestLive do
     {:ok, socket}
   end
 
-  # -------------
-  def handle_event("validate", _, socket) do
-    {:noreply, assign(socket, :form, to_form(%{}))}
+  def handle_event("validate", params_with_target, socket) do
+    params = Map.delete(params_with_target, "_target")
+
+    result =
+      params
+      |> Enum.map(fn {key, answer} ->
+        Template.fill(key, answer)
+      end)
+
+    socket =
+      socket
+      |> assign(:result, result)
+
+    {:noreply, socket}
   end
 
   def handle_event("save", params, socket) do
