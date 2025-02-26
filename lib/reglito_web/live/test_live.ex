@@ -9,6 +9,7 @@ defmodule ReglitoWeb.TestLive do
         <.render_questions form={@form} questions={@questions} />
         <.button>Save</.button>
       </.form>
+      <%= @result %>
     </div>
     """
   end
@@ -27,6 +28,7 @@ defmodule ReglitoWeb.TestLive do
       socket
       |> assign(:questions, questions)
       |> assign(:form, to_form(form))
+      |> assign(:result, "NADA TODAVIA")
 
     {:ok, socket}
   end
@@ -36,8 +38,21 @@ defmodule ReglitoWeb.TestLive do
     {:noreply, assign(socket, :form, to_form(%{}))}
   end
 
-  def handle_event("save", _, socket) do
-    {:noreply, assign(socket, :form, to_form(%{}))}
+  def handle_event("save", params, socket) do
+    result =
+      params
+      |> Enum.map(fn {key, values} ->
+        Enum.find(socket.assigns.questions, fn question -> question["field_name"] == key end)[
+          "result_template"
+        ]
+        |> String.replace("{OPTIONS}", Enum.join(Enum.reverse(values), ", "))
+      end)
+
+    socket =
+      socket
+      |> assign(:result, result)
+
+    {:noreply, socket}
   end
 
   # -------------
