@@ -10,11 +10,6 @@ defmodule ReglitoWeb.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
-    plug :fetch_session
-  end
-
   scope "/", ReglitoWeb do
     pipe_through :browser
 
@@ -27,13 +22,9 @@ defmodule ReglitoWeb.Router do
       live "/chapters_selection", ChaptersSelectionsLive
       live "/cooperative", CooperativeLive
       live "/check", CheckLive
+
+      live "/test", TestLive
     end
-  end
-
-  scope "/api", ReglitoWeb do
-    pipe_through :api
-
-    get "/register", SessionController, :put_cooperative_info
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
