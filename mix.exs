@@ -64,7 +64,8 @@ defmodule Reglito.MixProject do
       {:credo, "~> 1.7", runtime: false, only: :dev},
       {:sobelow, "~> 0.8", only: :dev},
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
-      {:chromic_pdf, "~> 1.14"}
+      {:chromic_pdf, "~> 1.14"},
+      {:uuidv7, "~> 0.2"}
     ]
   end
 

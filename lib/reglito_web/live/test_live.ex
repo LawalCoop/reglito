@@ -1,8 +1,8 @@
 defmodule ReglitoWeb.TestLive do
-  alias Reglito.Template
   use ReglitoWeb, :live_view
 
-  alias Reglito.Chapters
+  alias Reglito.Template
+  alias Reglito.Questions
   alias Reglito.AnswerForm
 
   import ReglitoWeb.Components.AnswerInputs
@@ -25,7 +25,7 @@ defmodule ReglitoWeb.TestLive do
   end
 
   def mount(_params, _session, socket) do
-    questions = Chapters.sections()
+    questions = Questions.all()
     form = AnswerForm.build(questions)
 
     socket =

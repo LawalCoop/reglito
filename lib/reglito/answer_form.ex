@@ -1,16 +1,16 @@
 defmodule Reglito.AnswerForm do
   def build(questions, form \\ %{})
 
-  def build([%{"field_name" => field_name, "nested_questions" => nil} | tail], form) do
-    new_form = Map.put(form, field_name, nil)
+  def build([%{key: key, nested_questions: nil} | tail], form) do
+    new_form = Map.put(form, key, nil)
     build(tail, new_form)
   end
 
   def build(
-        [%{"field_name" => field_name, "nested_questions" => nested_questions} | tail],
+        [%{key: key, nested_questions: nested_questions} | tail],
         form
       ) do
-    new_form = Map.put(form, field_name, nil)
+    new_form = Map.put(form, key, nil)
     build(tail ++ nested_questions, new_form)
   end
 
