@@ -3,7 +3,7 @@ defmodule ReglitoWeb.CooperativeLive do
 
   def render(assigns) do
     ~H"""
-    <div class="w-full flex flex-col items-center justify-center mt-40">
+    <div class="w-full flex flex-col items-center justify-center mt-20">
       <p class="font-bold text-xl mb-10">Completa con los datos de tu Cooperativa</p>
       <div class="w-full max-w-xs">
         <.simple_form for={@form} phx-change="validate" phx-submit="submit_coop">

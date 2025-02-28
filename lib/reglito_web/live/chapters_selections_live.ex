@@ -18,7 +18,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
               Capitulos seleccionados:
             </p>
             <%= for chapter <- Enum.reverse(@selected_chapters) do %>
-              <p><%= Map.get(chapter, "name") %></p>
+              <p><%= chapter.name %></p>
             <% end %>
           </div>
         <% else %>
@@ -38,7 +38,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
             </p>
             <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
               <.link href={
-                ~p"/start?#{%{selected_chapters: Enum.reverse(Enum.map(@selected_chapters, fn chapter -> chapter["code"] end))}}"
+                ~p"/start?#{%{selected_chapters: Enum.reverse(Enum.map(@selected_chapters, fn chapter -> chapter.code end))}}"
               }>
                 Siguiente <.icon name="hero-chevron-right" />
               </.link>
@@ -49,12 +49,12 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
             <p class="font-bold text-xl">
               <%= @chapters
               |> Enum.at(@current_chapter_index)
-              |> Map.get("name") %>
+              |> Map.get(:name) %>
             </p>
             <p>
               <%= @chapters
               |> Enum.at(@current_chapter_index)
-              |> Map.get("description") %>
+              |> Map.get(:description) %>
             </p>
             <div class="w-full flex justify-end gap-5 pr-10">
               <button class="text-red-700 hover:text-red-900" phx-click="chapter_dropped">
@@ -74,7 +74,7 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
   def mount(_params, session, socket) do
     cooperative_name = session["cooperative_name"]
     registration_number = session["registration_number"]
-    chapters = Chapters.read_chapters_description()
+    chapters = Chapters.all()
 
     socket =
       socket
