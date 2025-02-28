@@ -30,6 +30,7 @@ defmodule ReglitoWeb.Components.AnswerInputs do
   def answer_input(%{question: %{"answer_type" => "multiple"}} = assigns) do
     ~H"""
     <.input
+      class="w-full"
       type="select"
       field={@form[@field]}
       options={@question["options"]}

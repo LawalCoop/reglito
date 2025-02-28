@@ -57,8 +57,18 @@ defmodule Reglito.Template do
       |> Map.fetch!("answer_type")
 
     case type do
-      "multiple" -> String.replace(template, "{OPTIONS}", Enum.join(Enum.reverse(answer), ", "))
-      "text" -> String.replace(template, "{OPTIONS}", answer)
+      "multiple" ->
+        String.replace(template, "{OPTIONS}", Enum.join(Enum.reverse(answer), ", "))
+
+      "text" ->
+        String.replace(template, "{OPTIONS}", answer)
+
+      "exclusive" ->
+        if answer == "SI" do
+          String.replace(template, "{OPTIONS}", answer)
+        else
+          ""
+        end
     end
   end
 end
