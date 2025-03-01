@@ -15,7 +15,7 @@ defmodule ReglitoWeb.StartLive do
           <p class="text-xl font-bold"><%= @cooperative.name %></p>
         </div>
         <p class="font-bold mb-2">
-          Capitulo: INSERTAR NOMBRE DE CAPITULO
+          Capitulo: <%= @chapter_name %>
         </p>
         <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-300">
           <div
@@ -65,6 +65,7 @@ defmodule ReglitoWeb.StartLive do
       |> assign(:chapters_by_code, chapters_by_code)
       |> assign(:questions, questions)
       |> assign(:answers, [])
+      |> assign(:chapter_name, "")
       |> assign(:current_section_index, start_index)
       |> assign(:is_the_last_one, false)
       |> assign(:progress_multiplier, progress_multiplier)
@@ -82,6 +83,17 @@ defmodule ReglitoWeb.StartLive do
     socket =
       socket
       |> assign(:answers, answers)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:update_chapter_code, %{code: code}}, socket) do
+    chapter_name = Map.get(socket.assigns.chapters_by_code, code)
+    |> Map.get(:name)
+
+    socket =
+      socket
+      |> assign(:chapter_name, chapter_name)
 
     {:noreply, socket}
   end

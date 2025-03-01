@@ -65,13 +65,16 @@ defmodule ReglitoWeb.Components.AnswerInputs do
     questions = assigns.questions
     form = AnswerForm.build(questions)
     question_number = 0
+    question = Enum.at(questions, question_number)
+
+    send_chapter_code(question.chapter)
 
     socket =
       socket
       |> assign(:questions, questions)
       |> assign(:form, to_form(form))
       |> assign(:question_number, question_number)
-      |> assign(:question, Enum.at(questions, question_number))
+      |> assign(:question, question)
       |> assign(:is_the_last_one, false)
 
     {:ok, socket}
@@ -123,7 +126,11 @@ defmodule ReglitoWeb.Components.AnswerInputs do
     end
   end
 
-  # --- HANDLERS ---
+  def send_chapter_code(code) do
+    send(self(), {:update_chapter_code, %{code: code}})
+  end
+
+  # --- END HANDLERS ---
 
   defp nested_answer_inputs(assigns) do
     ~H"""
