@@ -8,10 +8,10 @@ defmodule ReglitoWeb.StartLive do
       <div class="px-20">
         <div class="p-4">
           <p class="">Reglamento interno de:</p>
-          <p class="text-xl font-bold">Lawal Cooperativa Tecnologica Ltda.</p>
+          <p class="text-xl font-bold"><%= @cooperative.name %></p>
         </div>
         <p class="font-bold mb-2">
-          Capitulo: <%= @chapter_name_by_code[chapter(@sections, @current_section_index)] %>
+          Capitulo: INSERTAR NOMBRE DE CAPITULO
         </p>
         <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-300">
           <div
@@ -26,68 +26,12 @@ defmodule ReglitoWeb.StartLive do
         <div class="w-1/2 h-full flex pl-20">
           <div class="flex flex-col w-full items-start pt-16">
             <p class="font-bold text-2xl mb-5">
-              <%= question(@sections, @current_section_index) %>
+              INSERTAR PREGUNTA
             </p>
             <div>
-              <%= case aswer_type(@sections, @current_section_index) do %>
-                <% "refillable" -> %>
-                  <.simple_form for={@refillable_form} phx-change="form_changed">
-                    <%= for {option, i} <- Enum.with_index(options(@sections, @current_section_index)) do %>
-                      <p>
-                        <.input
-                          type="text"
-                          label={option}
-                          id={option}
-                          field={@refillable_form["option_#{i}"]}
-                        />
-                      </p>
-                    <% end %>
-                  </.simple_form>
-                <% _ -> %>
-                  <%= for option <- options(@sections, @current_section_index) do %>
-                    <p>
-                      <input
-                        checked={
-                          Enum.any?(@aswer, fn selected_option -> selected_option == option end)
-                        }
-                        phx-click="option_selected"
-                        type="checkbox"
-                        name={option}
-                        id={option}
-                        phx-value-option-selected={option}
-                      />
-                      <%= option %>
-                    </p>
-                  <% end %>
-              <% end %>
+              INSERTAR NOMBRE DE CAPITULO
             </div>
-            <%= if not is_nil(related_question(@sections, @current_section_index)) do %>
-              <div class="mt-2">
-                <p class="font-bold text-2xl mb-2">
-                  <%= related_question(@sections, @current_section_index)["question"] %>
-                </p>
-                <div>
-                  <%= for option <- related_question(@sections, @current_section_index)["options"] do %>
-                    <p>
-                      <input
-                        checked={
-                          Enum.any?(@related_question_aswer, fn selected_option ->
-                            selected_option == option
-                          end)
-                        }
-                        phx-click="related_option_selected"
-                        type="checkbox"
-                        name={option}
-                        id={option}
-                        phx-value-option-selected={option}
-                      />
-                      <%= option %>
-                    </p>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-
+            INSERTAR RELATED QUESTION
             <div class="w-full flex justify-between mt-5">
               <button
                 phx-click="previous_section"
@@ -115,9 +59,7 @@ defmodule ReglitoWeb.StartLive do
         </div>
         <div class="w-1/2 h-full overflow-y-scroll m-5 p-5 bg-gray-100 rounded-xl">
           <div class="w-full flex flex-col justify-center">
-            <%= for {article, i} <- Enum.with_index(@articles) do %>
-              <p id={"#{i}"}><%= article %></p>
-            <% end %>
+            INSERTAR TEMPLATES
           </div>
         </div>
       </div>
@@ -125,40 +67,21 @@ defmodule ReglitoWeb.StartLive do
     """
   end
 
-  def mount(%{"selected_chapters" => selected_chapters}, _session, socket) do
-    chapters = Chapters.read_chapters_data()
-
-    chapter_name_by_code =
-      for %{"code" => code, "name" => name} <- Chapters.read_chapters_description(),
-          into: %{},
-          do: {code, name}
-
-    chapters =
-      chapters
-      |> Enum.filter(fn {key, _value} -> key in selected_chapters end)
-      |> Enum.into(%{})
-
-    sections =
-      chapters
-      |> Enum.flat_map(fn {chapter_key, %{"sections" => sections}} ->
-        Enum.map(sections, fn section ->
-          Map.put(section, "chapter", chapter_key)
-        end)
-      end)
-
-    progress_multiplier = 100 / length(sections)
+  def mount(
+        %{"selected_chapters" => selected_chapters},
+        %{"cooperative_name" => cooperative_name, "registration_number" => registration_number},
+        socket
+      ) do
+    progress_multiplier = 100 / length([1])
     start_index = 0
+    cooperative = %{name: cooperative_name, registration_number: registration_number}
 
     socket =
       socket
+      |> assign(:cooperative, cooperative)
       |> assign(:progress_multiplier, progress_multiplier)
       |> assign(:is_the_last_one, false)
-      |> assign(:sections, sections)
-      |> assign(:current_section_index, start_index)
-      |> assign(:aswer, [])
-      |> assign(:related_question_aswer, [])
-      |> assign(:articles, [])
-      |> assign(:chapter_name_by_code, chapter_name_by_code)
+      |> assign(:current_section_index, 0)
 
     {:ok, socket}
   end
