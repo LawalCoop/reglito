@@ -5,13 +5,10 @@ defmodule ReglitoWeb.TestLive do
   alias Reglito.Questions
   alias Reglito.AnswerForm
 
-  import ReglitoWeb.Components.AnswerInputs
-
   def render(assigns) do
     ~H"""
     <div class="mx-40 my-10">
       <.form for={@form} phx-change="validate" phx-submit="save">
-        <.nested_answer_inputs form={@form} questions={@questions} />
         <.button>Siguiente</.button>
       </.form>
 

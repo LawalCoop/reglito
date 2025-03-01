@@ -17,4 +17,8 @@ defmodule Reglito.Chapters do
       }
     ]
   end
+
+  def by_code do
+    Map.new(all(), &{&1.code, &1})
+  end
 end
