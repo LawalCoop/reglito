@@ -1,9 +1,13 @@
 defmodule Reglito.Template do
   alias Reglito.Questions
 
-  def fill(key, answer) do
+  def fill(key, answer, cooperative) do
     question = Questions.get_by_key(key)
-    template = question.result_template
+
+    template =
+      question.result_template
+      |> String.replace("{COOPERATIVE}", cooperative.name)
+
     type = question.answer_type
 
     case type do

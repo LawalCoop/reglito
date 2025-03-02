@@ -81,49 +81,52 @@ defmodule ReglitoWeb.Components.AnswerInputs do
   end
 
   def handle_event("validate", params_with_target, socket) do
-    params = Map.delete(params_with_target, "_target")
+    answers = Map.delete(params_with_target, "_target")
 
-    send(self(), {:new_value, params})
+    send(self(), {:new_value, answers})
 
-    {:noreply, socket}
+    {:noreply, assign(socket, :form, to_form(answers))}
   end
 
-  def handle_event("save", %{"save" => "previous_question"}, socket) do
+  def handle_event("save", %{"save" => "previous_question"} = params, socket) do
     new_question_number = socket.assigns.question_number - 1
+    answers = Map.delete(params, "save")
 
-    if new_question_number < 0 do
-      {:noreply, socket}
-    else
-      socket =
+    socket =
+      if new_question_number < 0 do
+        socket
+      else
+        send(self(), {:new_question, new_question_number})
+
         socket
         |> assign(:question_number, new_question_number)
         |> assign(:question, Enum.at(socket.assigns.questions, new_question_number))
         |> assign(:is_the_last_one, false)
+        |> assign(:form, to_form(answers))
+      end
 
-      {:noreply, socket}
-    end
+    {:noreply, socket}
   end
 
-  def handle_event("save", %{"save" => "next_question"}, socket) do
+  def handle_event("save", %{"save" => "next_question"} = params, socket) do
     question_quantity = length(socket.assigns.questions) - 1
     new_question_number = socket.assigns.question_number + 1
+    answers = Map.delete(params, "save")
 
-    if new_question_number == question_quantity do
-      socket =
-        socket
-        |> assign(:question_number, new_question_number)
-        |> assign(:question, Enum.at(socket.assigns.questions, new_question_number))
-        |> assign(:is_the_last_one, true)
+    socket =
+      socket
+      |> assign(:question_number, new_question_number)
+      |> assign(:question, Enum.at(socket.assigns.questions, new_question_number))
+      |> assign(:form, to_form(answers))
 
-      {:noreply, socket}
-    else
-      socket =
-        socket
-        |> assign(:question_number, new_question_number)
-        |> assign(:question, Enum.at(socket.assigns.questions, new_question_number))
+    socket =
+      if new_question_number == question_quantity,
+        do: assign(socket, :is_the_last_one, true),
+        else: socket
 
-      {:noreply, socket}
-    end
+    send(self(), {:new_question, new_question_number})
+
+    {:noreply, socket}
   end
 
   def send_chapter_code(code) do

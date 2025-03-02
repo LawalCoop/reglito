@@ -36,7 +36,10 @@ defmodule ReglitoWeb.StartLive do
         </div>
         <div class="w-1/2 h-full overflow-y-scroll m-5 p-5 bg-gray-100 rounded-xl">
           <div class="w-full flex flex-col justify-center">
-            <%= for {answer, index} <- Enum.with_index(@answers, 1) do %>
+            <%= for {answer, index} <-
+              @answers
+              |> Enum.reverse()
+              |> Enum.with_index(1) do %>
               <div>
                 <p><%= String.replace(answer, "{NUMBER}", to_string(index)) %></p>
               </div>
@@ -53,11 +56,11 @@ defmodule ReglitoWeb.StartLive do
         %{"cooperative_name" => cooperative_name, "registration_number" => registration_number},
         socket
       ) do
-    progress_multiplier = 100 / length([1])
-    start_index = 0
     cooperative = %{name: cooperative_name, registration_number: registration_number}
     chapters_by_code = Chapters.by_code()
     questions = Questions.all()
+    progress_multiplier = 100 / length(questions)
+    start_index = 0
 
     socket =
       socket
@@ -77,7 +80,7 @@ defmodule ReglitoWeb.StartLive do
     answers =
       answers
       |> Enum.map(fn {key, answer} ->
-        Template.fill(key, answer)
+        Template.fill(key, answer, socket.assigns.cooperative)
       end)
 
     socket =
@@ -88,13 +91,18 @@ defmodule ReglitoWeb.StartLive do
   end
 
   def handle_info({:update_chapter_code, %{code: code}}, socket) do
-    chapter_name = Map.get(socket.assigns.chapters_by_code, code)
-    |> Map.get(:name)
+    chapter_name =
+      Map.get(socket.assigns.chapters_by_code, code)
+      |> Map.get(:name)
 
     socket =
       socket
       |> assign(:chapter_name, chapter_name)
 
     {:noreply, socket}
+  end
+
+  def handle_info({:new_question, new_question_number}, socket) do
+    {:noreply, assign(socket, :current_section_index, new_question_number)}
   end
 end
