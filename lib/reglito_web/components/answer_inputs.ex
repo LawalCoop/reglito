@@ -4,7 +4,6 @@ defmodule ReglitoWeb.Components.AnswerInputs do
   import ReglitoWeb.CoreComponents
 
   alias Reglito.AnswerForm
-  alias Reglito.Questions
 
   def render(assigns) do
     ~H"""
@@ -17,14 +16,15 @@ defmodule ReglitoWeb.Components.AnswerInputs do
             field={question_to_render.key}
             question={question_to_render}
           />
-          <%= if not is_nil(question_to_render.nested_questions) and not question_to_render.key != @question.key do %>
-            <div class="ml-10">
-              <.nested_answer_inputs
-                hidden={false}
+          <%= if not is_nil(question_to_render.nested_questions) do %>
+            <%= for nested_question_to_render <- question_to_render.nested_questions do %>
+              <.answer_input
+                hidden={question_to_render.key != @question.key}
                 form={@form}
-                questions={question_to_render.nested_questions}
+                field={nested_question_to_render.key}
+                question={nested_question_to_render}
               />
-            </div>
+            <% end %>
           <% end %>
         <% end %>
 
@@ -135,19 +135,6 @@ defmodule ReglitoWeb.Components.AnswerInputs do
 
   # --- END HANDLERS ---
 
-  defp nested_answer_inputs(assigns) do
-    ~H"""
-    <%= for %{key: key} = question <- Questions.all() do %>
-      <.answer_input hidden={@hidden} form={@form} field={key} question={question} />
-      <%= if not is_nil(question.nested_questions) do %>
-        <div class="ml-10">
-          <.nested_answer_inputs hidden={@hidden} form={@form} questions={question.nested_questions} />
-        </div>
-      <% end %>
-    <% end %>
-    """
-  end
-
   defp answer_input(%{question: %{answer_type: :multiple}} = assigns) do
     ~H"""
     <.input
@@ -167,7 +154,7 @@ defmodule ReglitoWeb.Components.AnswerInputs do
       hidden={@hidden}
       type="select"
       field={@form[@field]}
-      options={@question.options}
+      options={[{"-", nil} | @question.options]}
       label={@question.question}
     />
     """

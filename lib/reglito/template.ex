@@ -2,7 +2,7 @@ defmodule Reglito.Template do
   alias Reglito.Questions
 
   def fill(key, answer, cooperative) do
-    question = Questions.get_by_key(key)
+    question = Questions.get_by_key(Questions.all_flatten_questions(), key)
 
     template =
       question.result_template

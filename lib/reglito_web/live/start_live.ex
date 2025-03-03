@@ -38,7 +38,6 @@ defmodule ReglitoWeb.StartLive do
           <div class="w-full flex flex-col justify-center">
             <%= for {answer, index} <-
               @answers
-              |> Enum.reverse()
               |> Enum.with_index(1) do %>
               <div>
                 <p><%= String.replace(answer, "{NUMBER}", to_string(index)) %></p>
