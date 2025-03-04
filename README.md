@@ -23,3 +23,6 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 - Template + template condicional
 - Template + input de texto
 - Template condicional
+
+## TODO:
+TIPS en las preguntas, puede existir el caso en el que se necesite dar información extra sobre la pregunta que se esta realizando

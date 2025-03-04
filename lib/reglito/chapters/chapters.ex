@@ -20,20 +20,20 @@ defmodule Reglito.Chapters do
         code: :power_and_duties,
         description:
           "Aquí se definen con mayor precisión los derechos y obligaciones de quienes forman parte de la cooperativa en base al estatuto modelo del INAES adaptándolo a las particularidades de tu entidad."
+      },
+      %Chapter{
+        name: "Retribuciones periódicas por aportes de trabajo",
+        code: :retributions,
+        description:
+          "En cooperativas de trabajo existen dos tipos de retribuciones, las que se dan periódicamente (algunas cooperativas lo hacen diariamente, otras semanalmente y otras por mes) y las que luego se votan en asamblea con el resultado del ejercicio. Hay cooperativas que tienen distintos criterios para repartirse estos excedentes (se suelen usar casi de manera idéntica las palabras retiro, adelanto de retorno, retribución, adelanto de excedente), por ejemplo pueden fijar categorías con criterios de antigüedad, si la persona tiene hijos/as o no para lo que es períodico y repartir lo anual por partes iguales o por hora trabajada con independencia de la categoría. En esta sección te mostraremos algunos modelos de reparto de retribuciones periódicas y en otro capítulo se aborda la forma de distribución anual.
+           Es importante mencionar que por Resolución de INAES, nada de lo que se ponga en este capítulo puede ser inferior al convenio colectivo de trabajo que corresponda a la actividad de la cooperativa para trabajadores con patrón."
+      },
+      %Chapter{
+        name: "Retribuciones anuales que surgen del balance contable",
+        code: :balance_retributions,
+        description:
+          "Como mencionamos en el capítulo anterior, aquí te mostraremos modelos de como se reparte el excedente que surge del balance anual"
       }
-      # %Chapter{
-      #   name: "Retribuciones periódicas por aportes de trabajo",
-      #   code: :retributions,
-      #   description:
-      #     "En cooperativas de trabajo existen dos tipos de retribuciones, las que se dan periódicamente (algunas cooperativas lo hacen diariamente, otras semanalmente y otras por mes) y las que luego se votan en asamblea con el resultado del ejercicio. Hay cooperativas que tienen distintos criterios para repartirse estos excedentes (se suelen usar casi de manera idéntica las palabras retiro, adelanto de retorno, retribución, adelanto de excedente), por ejemplo pueden fijar categorías con criterios de antigüedad, si la persona tiene hijos/as o no para lo que es períodico y repartir lo anual por partes iguales o por hora trabajada con independencia de la categoría. En esta sección te mostraremos algunos modelos de reparto de retribuciones periódicas y en otro capítulo se aborda la forma de distribución anual.
-      #     Es importante mencionar que por Resolución de INAES, nada de lo que se ponga en este capítulo puede ser inferior al convenio colectivo de trabajo que corresponda a la actividad de la cooperativa para trabajadores con patrón."
-      # },
-      # %Chapter{
-      #   name: "Retribuciones anuales que surgen del balance contable",
-      #   code: :balance_retributions,
-      #   description:
-      #     "Como mencionamos en el capítulo anterior, aquí te mostraremos modelos de como se reparte el excedente que surge del balance anual"
-      # },
       # %Chapter{
       #   name: "De las sanciones",
       #   code: :penalties,
