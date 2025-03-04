@@ -57,6 +57,10 @@ defmodule Reglito.Template do
     String.replace(template, "{TEXT}", answer)
   end
 
+  def fill(template, answer, :number) do
+    String.replace(template, "{NUMBER}", answer)
+  end
+
   def fill(template, answer, :exclusive) do
     if answer == "SI" do
       String.replace(template, "{OPTIONS}", answer)
