@@ -33,21 +33,21 @@ defmodule Reglito.Chapters do
         code: :balance_retributions,
         description:
           "Como mencionamos en el capítulo anterior, aquí te mostraremos modelos de como se reparte el excedente que surge del balance anual"
+      },
+      %Chapter{
+        name: "De las sanciones",
+        code: :penalties,
+        description:
+          "En este capítulo tendrás modelos del procedimiento a aplicar si alguna persona asociada inclumple sus deberes y obligaciones. La primera parte se refiere a esto y la segunda parte al procedimiento que se debe aplicar en los casos mas graves, a saber suspensiones o exclusiones, este procedimiento se denomina “sumario” y debe seguir ciertas pautas que se describen en este capítulo."
+      },
+      %Chapter{
+        name: "De las licencias",
+        code: :licenses,
+        description:
+          "En este capítulo te mostramos algunos modelos de artículos sobre licencias en cooperativas de trabajo, al igual que en el de retribuciones periódicas, en este el INAES no aprueba reglamentos que tengan condiciones de trabajo inferiores a la de los trabajadores dependientes de la rama en la que la cooperativa opera.
+          Aqui podrás ver modelos de artículos para licencias por embarazo, enfermedad, entre otros.
+          A su vez, incorporamos modelos de artículos de renuncias de personas asociadas por jubilación y/o invalidez."
       }
-      # %Chapter{
-      #   name: "De las sanciones",
-      #   code: :penalties,
-      #   description:
-      #     "En este capítulo tendrás modelos del procedimiento a aplicar si alguna persona asociada inclumple sus deberes y obligaciones. La primera parte se refiere a esto y la segunda parte al procedimiento que se debe aplicar en los casos mas graves, a saber suspensiones o exclusiones, este procedimiento se denomina “sumario” y debe seguir ciertas pautas que se describen en este capítulo."
-      # },
-      # %Chapter{
-      #   name: "De las licencias",
-      #   code: :licenses,
-      #   description:
-      #     "En este capítulo te mostramos algunos modelos de artículos sobre licencias en cooperativas de trabajo, al igual que en el de retribuciones periódicas, en este el INAES no aprueba reglamentos que tengan condiciones de trabajo inferiores a la de los trabajadores dependientes de la rama en la que la cooperativa opera.
-      #     Aqui podrás ver modelos de artículos para licencias por embarazo, enfermedad, entre otros.
-      #     A su vez, incorporamos modelos de artículos de renuncias de personas asociadas por jubilación y/o invalidez."
-      # }
     ]
   end
 
