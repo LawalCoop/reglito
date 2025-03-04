@@ -1,28 +1,75 @@
 defmodule Reglito.Template do
-  alias Reglito.Questions
+  def render(filled_templates, result \\ [])
 
-  def fill(key, answer, cooperative) do
-    question = Questions.get_by_key(Questions.all_flatten_questions(), key)
+  def render([{template_filled, [nil]} | tail], result) do
+    result = result ++ [template_filled]
+    render(tail, result)
+  end
 
-    template =
-      question.result_template
-      |> String.replace("{COOPERATIVE}", cooperative.name)
+  def render([{template_filled, nil} | tail], result) do
+    result = result ++ [template_filled]
+    render(tail, result)
+  end
 
-    type = question.answer_type
+  def render([{template_filled, nested} | tail], result) do
+    result = result ++ [template_filled]
+    render(nested ++ tail, result)
+  end
 
-    case type do
-      :multiple ->
-        String.replace(template, "{OPTIONS}", Enum.join(Enum.reverse(answer), ", "))
+  def render([], result) do
+    result
+  end
 
-      :text ->
-        String.replace(template, "{OPTIONS}", answer)
+  def fill_all(questions, answers, cooperative) do
+    Enum.map(questions, fn question ->
+      answer = Map.get(answers, question.key)
 
-      :exclusive ->
-        if answer == "SI" do
-          String.replace(template, "{OPTIONS}", answer)
-        else
-          ""
-        end
+      nested_filled_templates =
+        if not is_nil(question.nested_questions),
+          do: fill_all(question.nested_questions, answers, cooperative),
+          else: nil
+
+      if not is_nil(answer) and answer != "" do
+        filled_template =
+          question.result_template
+          |> fill(answer, question.answer_type)
+          |> fill(
+            cooperative,
+            :cooperative
+          )
+
+        {filled_template, nested_filled_templates}
+      end
+    end)
+    |> Enum.filter(&(!is_nil(&1)))
+    |> Enum.with_index(fn {filled, nested_filled}, index ->
+      article_number = to_string(index + 1)
+      filled_with_article_number = fill(filled, article_number, :article_number)
+      {filled_with_article_number, nested_filled}
+    end)
+  end
+
+  def fill(template, answer, :multiple) do
+    String.replace(template, "{OPTIONS}", Enum.join(Enum.reverse(answer), ", "))
+  end
+
+  def fill(template, answer, :text) do
+    String.replace(template, "{OPTIONS}", answer)
+  end
+
+  def fill(template, answer, :exclusive) do
+    if answer == "SI" do
+      String.replace(template, "{OPTIONS}", answer)
+    else
+      ""
     end
+  end
+
+  def fill(template, cooperative, :cooperative) do
+    String.replace(template, "{COOPERATIVE}", cooperative.name)
+  end
+
+  def fill(template, number, :article_number) do
+    String.replace(template, "{NUMBER}", number)
   end
 end

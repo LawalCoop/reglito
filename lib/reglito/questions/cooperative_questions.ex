@@ -59,6 +59,49 @@ defmodule Reglito.Questions.CooperativeQuestions do
         "ARTICULO {NUMBER}: Las personas integrantes del Consejo de Administración y la sindicatura deberán ser elegidos en Asambleas General, Ordinaria o Extraordinaria por voto de las personas asociadas presentes por mayoría simple, que de acuerdo al Estatuto Social y a la Ley 20.337 o a la que la modifique y este reglamento estén en condiciones de hacerlo.
         Para ser candidato/a a consejero/a o síndico/a de la cooperativa la personas asociada deberá ser mayor de 18 años de edad.
         El consejo deberá reunirse como mínimo una vez al mes y podrá reunirse en cualquier  momento que la circunstancia lo exija."
+    },
+    %Question{
+      chapter: :cooperative,
+      key: UUIDv7.generate(),
+      question:
+        "¿Las personas asociadas deben prestar su colaboración cuando sea requerida a pesar que el consejo es el encargado de la gestión económica y contable?",
+      answer_type: :exclusive,
+      options: ["SI", "NO"],
+      nested_questions: nil,
+      result_template:
+        "ARTICULO {NUMBER}: La gestión económica y contable dependerá del consejo de Administración, que lo hace a través de la estructura de la Cooperativa sin embargo todas las personas asociadas deberán prestar su colaboración en caso de ser requerida. En el desarrollo de las actividades se deberá cumplir con las disposiciones legales, estatutarias y las resoluciones de asambleas."
+    },
+    %Question{
+      chapter: :cooperative,
+      key: UUIDv7.generate(),
+      question:
+        "¿Se autoriza a la cooperativa a subir imagenes, videos u otros soportes para difusión?",
+      answer_type: :exclusive,
+      options: ["SI", "NO"],
+      nested_questions: nil,
+      result_template:
+        "ARTICULO {NUMBER}: Las personas asociadas autorizan a la cooperativa a utilizar sus imágenes, ya sea en fotografías, vídeos u otros medios audiovisuales, en el marco de las actividades promocionales, publicitarias y de difusión de la Cooperativa sin necesidad de que se genere ningún tipo de derecho a percibir contraprestación económica alguna por parte de las personas asociadas."
+    },
+    %Question{
+      chapter: :cooperative,
+      key: UUIDv7.generate(),
+      question: "Áreas que tendrá la cooperativa",
+      answer_type: :multiple,
+      options: ["Administración", "Producción", "Control de Calidad"],
+      nested_questions: [
+        %Question{
+          chapter: :cooperative,
+          key: UUIDv7.generate(),
+          question: "Cada área ¿tendrá una persona que coordine?",
+          answer_type: :exclusive,
+          options: ["SI", "NO"],
+          nested_questions: nil,
+          result_template:
+            "cada una de ellas tendrá un/a coordinador/a designado/a por el Consejo de Administración por el tiempo que este determine"
+        }
+      ],
+      result_template:
+        "ARTICULO {NUMBER}: La cooperativa se distribuirá en las siguientes áreas, {OPTIONS}. El Consejo podrá a su vez, modificar las áreas de la cooperativa así como todo el articulado de esta sección sin necesidad de reforma del reglamento toda vez que son cuestiones de mera organización interna."
     }
   ]
 

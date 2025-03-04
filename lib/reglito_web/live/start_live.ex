@@ -36,11 +36,9 @@ defmodule ReglitoWeb.StartLive do
         </div>
         <div class="w-1/2 h-full overflow-y-scroll m-5 p-5 bg-gray-100 rounded-xl">
           <div class="w-full flex flex-col justify-center">
-            <%= for {answer, index} <-
-              @answers
-              |> Enum.with_index(1) do %>
+            <%= for rule <- @rules do %>
               <div>
-                <p><%= String.replace(answer, "{NUMBER}", to_string(index)) %></p>
+                <p><%= rule %></p>
               </div>
             <% end %>
           </div>
@@ -66,7 +64,7 @@ defmodule ReglitoWeb.StartLive do
       |> assign(:cooperative, cooperative)
       |> assign(:chapters_by_code, chapters_by_code)
       |> assign(:questions, questions)
-      |> assign(:answers, [])
+      |> assign(:rules, [])
       |> assign(:chapter_name, "")
       |> assign(:current_section_index, start_index)
       |> assign(:is_the_last_one, false)
@@ -76,15 +74,13 @@ defmodule ReglitoWeb.StartLive do
   end
 
   def handle_info({:new_value, answers}, socket) do
-    answers =
-      answers
-      |> Enum.map(fn {key, answer} ->
-        Template.fill(key, answer, socket.assigns.cooperative)
-      end)
+    rules =
+      Template.fill_all(socket.assigns.questions, answers, socket.assigns.cooperative)
+      |> Template.render()
 
     socket =
       socket
-      |> assign(:answers, answers)
+      |> assign(:rules, rules)
 
     {:noreply, socket}
   end
