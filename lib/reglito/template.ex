@@ -54,7 +54,7 @@ defmodule Reglito.Template do
   end
 
   def fill(template, answer, :text) do
-    String.replace(template, "{OPTIONS}", answer)
+    String.replace(template, "{TEXT}", answer)
   end
 
   def fill(template, answer, :exclusive) do

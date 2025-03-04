@@ -49,13 +49,15 @@ defmodule ReglitoWeb.StartLive do
   end
 
   def mount(
-        %{"selected_chapters" => _selected_chapters},
+        %{"selected_chapters" => selected_chapters},
         %{"cooperative_name" => cooperative_name, "registration_number" => registration_number},
         socket
       ) do
+    selected_chapters = Enum.map(selected_chapters, &String.to_existing_atom/1)
+
     cooperative = %{name: cooperative_name, registration_number: registration_number}
     chapters_by_code = Chapters.by_code()
-    questions = Questions.all()
+    questions = Questions.selected_chapters_questions(selected_chapters)
     progress_multiplier = 100 / length(questions)
     start_index = 0
 

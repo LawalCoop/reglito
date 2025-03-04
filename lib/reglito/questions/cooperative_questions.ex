@@ -81,27 +81,6 @@ defmodule Reglito.Questions.CooperativeQuestions do
       nested_questions: nil,
       result_template:
         "ARTICULO {NUMBER}: Las personas asociadas autorizan a la cooperativa a utilizar sus imágenes, ya sea en fotografías, vídeos u otros medios audiovisuales, en el marco de las actividades promocionales, publicitarias y de difusión de la Cooperativa sin necesidad de que se genere ningún tipo de derecho a percibir contraprestación económica alguna por parte de las personas asociadas."
-    },
-    %Question{
-      chapter: :cooperative,
-      key: UUIDv7.generate(),
-      question: "Áreas que tendrá la cooperativa",
-      answer_type: :multiple,
-      options: ["Administración", "Producción", "Control de Calidad"],
-      nested_questions: [
-        %Question{
-          chapter: :cooperative,
-          key: UUIDv7.generate(),
-          question: "Cada área ¿tendrá una persona que coordine?",
-          answer_type: :exclusive,
-          options: ["SI", "NO"],
-          nested_questions: nil,
-          result_template:
-            "cada una de ellas tendrá un/a coordinador/a designado/a por el Consejo de Administración por el tiempo que este determine"
-        }
-      ],
-      result_template:
-        "ARTICULO {NUMBER}: La cooperativa se distribuirá en las siguientes áreas, {OPTIONS}. El Consejo podrá a su vez, modificar las áreas de la cooperativa así como todo el articulado de esta sección sin necesidad de reforma del reglamento toda vez que son cuestiones de mera organización interna."
     }
   ]
 

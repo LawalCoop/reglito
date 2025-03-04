@@ -162,13 +162,13 @@ defmodule ReglitoWeb.Components.AnswerInputs do
 
   defp answer_input(%{question: %{answer_type: :text}} = assigns) do
     ~H"""
-    <.input hidden={@hidden} type="text" field={@form[@field]} label={@question["question"]} />
+    <.input hidden={@hidden} type="text" field={@form[@field]} label={@question.question} />
     """
   end
 
   defp answer_input(%{question: %{answer_type: :number}} = assigns) do
     ~H"""
-    <.input hidden={@hidden} type="number" field={@form[@field]} label={@question["question"]} />
+    <.input hidden={@hidden} type="number" field={@form[@field]} label={@question.question} />
     """
   end
 end
