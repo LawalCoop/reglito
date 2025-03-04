@@ -25,4 +25,5 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 - Template condicional
 
 ## TODO:
-TIPS en las preguntas, puede existir el caso en el que se necesite dar información extra sobre la pregunta que se esta realizando
+- TIPS en las preguntas, puede existir el caso en el que se necesite dar información extra sobre la pregunta que se esta realizando
+- Campo de texto opcional para agregar opcion custom

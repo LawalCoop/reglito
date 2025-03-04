@@ -69,6 +69,10 @@ defmodule Reglito.Template do
     end
   end
 
+  def fill(template, answer, :one_option) do
+    String.replace(template, "{OPTION}", answer)
+  end
+
   def fill(template, cooperative, :cooperative) do
     String.replace(template, "{COOPERATIVE}", cooperative.name)
   end
