@@ -129,6 +129,12 @@ defmodule ReglitoWeb.Components.AnswerInputs do
     {:noreply, socket}
   end
 
+  def handle_event("save", %{"save" => "to_check"}, socket) do
+    send(self(), {:to_check})
+
+    {:noreply, socket}
+  end
+
   def send_chapter_code(code) do
     send(self(), {:update_chapter_code, %{code: code}})
   end

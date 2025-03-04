@@ -75,6 +75,13 @@ defmodule ReglitoWeb.StartLive do
     {:ok, socket}
   end
 
+  def handle_info({:to_check}, socket) do
+    {:noreply,
+     push_navigate(socket,
+       to: "/check?articles=#{Base.encode64(Jason.encode!(socket.assigns.rules))}"
+     )}
+  end
+
   def handle_info({:new_value, answers}, socket) do
     rules =
       Template.fill_all(socket.assigns.questions, answers, socket.assigns.cooperative)

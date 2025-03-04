@@ -1,4 +1,5 @@
 defmodule Reglito.Questions do
+  alias Reglito.Questions.PowerAndDutiesQuestions
   alias Reglito.Questions.ServicesQuestions
   alias UUIDv7
   alias Reglito.Questions.CooperativeQuestions
@@ -10,7 +11,8 @@ defmodule Reglito.Questions do
   def selected_chapters_questions(selected_chapters) do
     questions_by_chapter = %{
       cooperative: CooperativeQuestions.all(),
-      services: ServicesQuestions.all()
+      services: ServicesQuestions.all(),
+      power_and_duties: PowerAndDutiesQuestions.all()
     }
 
     Enum.reduce(selected_chapters, [], fn chapter, acc ->
