@@ -19,5 +19,6 @@ defmodule Reglito.Questions.BalanceRetributionsQuestions do
     }
   ]
 
+  @spec all :: [%Question{}]
   def all, do: @all
 end

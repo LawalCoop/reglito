@@ -105,5 +105,6 @@ defmodule Reglito.Questions.PowerAndDutiesQuestions do
     }
   ]
 
+  @spec all :: [%Question{}]
   def all, do: @all
 end

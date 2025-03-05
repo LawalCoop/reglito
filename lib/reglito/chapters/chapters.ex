@@ -1,6 +1,7 @@
 defmodule Reglito.Chapters do
   alias Reglito.Chapters.Chapter
 
+  @spec all :: [%Chapter{}]
   def all do
     [
       %Chapter{
@@ -51,6 +52,7 @@ defmodule Reglito.Chapters do
     ]
   end
 
+  @spec by_code :: %{atom() => %Chapter{}}
   def by_code do
     Map.new(all(), &{&1.code, &1})
   end

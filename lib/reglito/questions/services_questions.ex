@@ -46,5 +46,6 @@ defmodule Reglito.Questions.ServicesQuestions do
     }
   ]
 
+  @spec all :: [%Question{}]
   def all, do: @all
 end

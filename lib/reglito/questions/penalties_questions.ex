@@ -148,5 +148,6 @@ defmodule Reglito.Questions.PenaltiesQuestions do
     }
   ]
 
+  @spec all :: [%Question{}]
   def all, do: @all
 end

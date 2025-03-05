@@ -121,5 +121,6 @@ defmodule Reglito.Questions.RetributionsQuestions do
     }
   ]
 
+  @spec all :: [%Question{}]
   def all, do: @all
 end

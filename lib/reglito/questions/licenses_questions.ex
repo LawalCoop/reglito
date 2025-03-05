@@ -69,5 +69,6 @@ defmodule Reglito.Questions.LicensesQuestions do
     }
   ]
 
+  @spec all :: [%Question{}]
   def all, do: @all
 end
