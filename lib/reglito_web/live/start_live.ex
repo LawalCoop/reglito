@@ -8,41 +8,43 @@ defmodule ReglitoWeb.StartLive do
 
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col h-full w-full">
-      <div class="px-20">
-        <div class="p-4">
-          <p class="">Reglamento interno de:</p>
-          <p class="text-xl font-bold"><%= @cooperative.name %></p>
+    <div class="flex flex-col w-full">
+      <div class="flex mt-4 px-8">
+        <div class="flex-1 p-4">
+          <h1 class="text-xl font-bold">
+            Reglamento interno de la cooperativa: <%= @cooperative.name %>
+          </h1>
         </div>
-        <p class="font-bold mb-2">
-          Capitulo: <%= @chapter_name %>
-        </p>
-        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-300">
-          <div
-            class="bg-blue-600 h-2.5 rounded-full"
-            style={"width: #{@progress_multiplier  * (@current_section_index + 1)}%"}
-          >
+
+        <div class="flex-1">
+          <p class="font-bold mb-2">
+            Preguntas: <%= @current_section_index + 1 %> de <%= length(@questions) %>
+          </p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-300">
+            <div
+              class="bg-blue-600 h-2.5 rounded-full"
+              style={"width: #{@progress_multiplier  * (@current_section_index + 1)}%"}
+            >
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="flex">
-        <div class="w-1/2 h-full flex pl-20">
-          <div class="flex flex-col w-full pt-5">
-            <div class="font-bold text-2xl mb-5">
-              <.live_component module={AnswerInputs} id="answers" questions={@questions} />
+      <div class="flex-1 mx-10 mt-5 mb-5">
+        <div class="px-5 py-4 min-h-64 max-h-64  overflow-y-scroll bg-gray-100 rounded-md w-full flex flex-col">
+          <%= for rule <- @rules do %>
+            <div>
+              <p><%= rule %></p>
             </div>
-          </div>
+          <% end %>
         </div>
-        <div class="w-1/2 h-full overflow-y-scroll m-5 p-5 bg-gray-100 rounded-xl">
-          <div class="w-full flex flex-col justify-center">
-            <%= for rule <- @rules do %>
-              <div>
-                <p><%= rule %></p>
-              </div>
-            <% end %>
-          </div>
-        </div>
+      </div>
+
+      <div class="mx-10">
+        <p class="font-bold mb-2">
+          Capitulo: <%= @chapter_name %>
+        </p>
+        <.live_component module={AnswerInputs} id="answers" questions={@questions} />
       </div>
     </div>
     """
