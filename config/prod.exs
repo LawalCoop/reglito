@@ -11,7 +11,7 @@ config :reglito, ReglitoWeb.Endpoint,
     "https://reglito.lawal.io",
     "//reglito.lawal.io",
     "//reglito.lawal.coop",
-    "//https://reglito.fly.dev"
+    "//reglito.fly.dev"
   ],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
