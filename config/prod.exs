@@ -6,10 +6,10 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :reglito, ReglitoWeb.Endpoint,
-  url: [host: "reglito.lawal.io", port: 443],
+  url: [host: "reglito.lawal.coop", port: 443],
   check_origin: [
-    "https://reglito.lawal.io",
-    "//reglito.lawal.io"
+    "https://reglito.lawal.coop",
+    "//reglito.lawal.coop"
   ],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
