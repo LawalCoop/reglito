@@ -7,7 +7,12 @@ import Config
 # before starting your production server.
 config :reglito, ReglitoWeb.Endpoint,
   url: [host: "reglito.lawal.io", port: 443],
-  check_origin: ["https://reglito.lawal.io", "//reglito.lawal.io"],
+  check_origin: [
+    "https://reglito.lawal.io",
+    "//reglito.lawal.io",
+    "//reglito.lawal.coop",
+    "//https://reglito.fly.dev"
+  ],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Configures Swoosh API Client
