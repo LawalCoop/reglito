@@ -9,9 +9,7 @@ config :reglito, ReglitoWeb.Endpoint,
   url: [host: "reglito.lawal.io", port: 443],
   check_origin: [
     "https://reglito.lawal.io",
-    "//reglito.lawal.io",
-    "//reglito.lawal.coop",
-    "//reglito.fly.dev"
+    "//reglito.lawal.io"
   ],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
