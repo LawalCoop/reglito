@@ -1,15 +1,13 @@
-<header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+<main class="h-screen flex flex-col">
+  <div class="flex-none">
     <.link href="/">
-      <div class="flex items-center gap-4">
+      <div class="flex pl-10 my-4 gap-4">
         <img class="h-11" src={~p"/images/pencil.gif"} alt="pencil" />
         <h1 class="text-5xl font-extrabold drop-shadow-xl">Reglito</h1>
       </div>
     </.link>
   </div>
-</header>
-<main class="w-full">
-  <div class="w-full">
+  <div class="grow">
     <.flash_group flash={@flash} />
     <%= @inner_content %>
   </div>

@@ -4,13 +4,57 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
 
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col justify-center items-center">
-      <%= if @selection_status == :done do %>
-        <div class=" flex flex-col items-center gap-4 px-24 mt-32">
+    <div id="container" class="h-full flex flex-col">
+      <div id="header" class="flex justify-between items-center w-full py-10 px-10">
+        <div id="header_left" class="w-[50%] flex flex-col items-end pr-10">
+          <p class="text-2xl font-bold">
+            ¿Qué aspectos de <%= @cooperative_name %> querés reglamentar?
+          </p>
+          <p class="text-xl">
+            Elegí los que consideres, no es obligatorio que sean todos.
+          </p>
+        </div>
+
+        <div id="header_right" class="w-[50%] flex flex-col items-start pl-10">
+          <p class="text-xl font-bold mb-2">
+            Capitulos seleccionados:
+          </p>
+          <%= if !Enum.empty?(@selected_chapters) do %>
+            <p><%= @selected_chapters |> Enum.map(& &1.name) |> Enum.join(", ") %></p>
+          <% else %>
+            <p class="text-red-700 gap-2">
+              <.icon class="text-red-700" name="hero-exclamation-triangle" />
+              Todavia no seleccionaste ningún capitulo
+            </p>
+          <% end %>
+        </div>
+      </div>
+
+      <div id="chapter_selection" class="grow item flex flex-col justify-center items-center px-80">
+        <%= if @selection_status == :done do %>
           <p class="flex flex-col justify-center items-center text-2xl font-bold">
             <img class="h-16 mb-5" src={~p"/images/success.gif"} alt="success" />
             Completaste la selección de capitulos
           </p>
+          <p class="text-xl">
+            ahora vamos a contestar las preguntas de cada capitulo
+          </p>
+        <% else %>
+          <p class="font-bold text-xl">
+            <%= @chapters
+            |> Enum.at(@current_chapter_index)
+            |> Map.get(:name) %>
+          </p>
+          <p>
+            <%= @chapters
+            |> Enum.at(@current_chapter_index)
+            |> Map.get(:description) %>
+          </p>
+        <% end %>
+      </div>
+
+      <div id="footer" class="flex items-center justify-center gap-10 p-10">
+        <%= if @selection_status == :done do %>
           <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
             <.link href={
               ~p"/start?#{%{selected_chapters: Enum.reverse(Enum.map(@selected_chapters, fn chapter -> chapter.code end))}}"
@@ -18,57 +62,21 @@ defmodule ReglitoWeb.ChaptersSelectionsLive do
               Siguiente <.icon name="hero-chevron-right" />
             </.link>
           </button>
-        </div>
-      <% else %>
-        <div class="max-w-[40%] flex flex-col my-12">
-          <div class="flex flex-col mb-5">
-            <p class="text-2xl font-bold">
-              ¿Qué aspectos de <%= @cooperative_name %> querés reglamentar?
-            </p>
-            <p class="text-xl">
-              Elegí los que consideres, no es obligatorio que sean todos.
-            </p>
-          </div>
-          <div class="border-l-4 border-black pl-8 mt-8 flex h-10 justify-center items-center">
-            <%= if !Enum.empty?(@selected_chapters) do %>
-              <div class="w-full">
-                <p class="text-xl font-bold">
-                  Capitulos seleccionados:
-                </p>
-                <p><%= @selected_chapters |> Enum.map(& &1.name) |> Enum.join(", ") %></p>
-              </div>
-            <% else %>
-              <p class="flex text-red-700 gap-2 justify-center items-center">
-                <.icon class="text-red-700" name="hero-exclamation-triangle" />
-                Todavia no seleccionaste ningún capitulo
-              </p>
-            <% end %>
-          </div>
-        </div>
-
-        <div id="chapter_to_select" class="w-[60%] justify-center items-center">
-          <div class="px-24">
-            <p class="font-bold text-xl">
-              <%= @chapters
-              |> Enum.at(@current_chapter_index)
-              |> Map.get(:name) %>
-            </p>
-            <p>
-              <%= @chapters
-              |> Enum.at(@current_chapter_index)
-              |> Map.get(:description) %>
-            </p>
-            <div class="w-full flex justify-center gap-5 mt-5">
-              <button class="text-red-700 hover:text-red-900" phx-click="chapter_dropped">
-                <.icon class="w-8 h-8" name="hero-x-circle" />
-              </button>
-              <button class=" text-green-700 hover:text-green-900" phx-click="chapter_selected">
-                <.icon class="w-8 h-8" name="hero-check-circle" />
-              </button>
-            </div>
-          </div>
-        </div>
-      <% end %>
+        <% else %>
+          <button
+            phx-click="chapter_dropped"
+            class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
+          >
+            No reglamentar <.icon class="w-8 h-8" name="hero-x-mark" />
+          </button>
+          <button
+            phx-click="chapter_selected"
+            class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
+          >
+            Reglamentar <.icon class="w-8 h-8" name="hero-check" />
+          </button>
+        <% end %>
+      </div>
     </div>
     """
   end
