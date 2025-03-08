@@ -62,12 +62,18 @@ defmodule Reglito.Questions.PowerAndDutiesQuestions do
       question: "Derechos de las personas asociadas",
       answer_type: :multiple,
       options: [
-        "Ser elector/a y elegido/a para el desempeño de los diferentes cargos en los marcos que establece el Estatuto Social y el presente Reglamento Interno.",
-        "Con la firma del cincuenta por ciento (50%) del total de las personas asociadas, se podrá solicitar la realización de asambleas extraordinarias. Esta convocatoria deberá expresar concretamente los puntos del Orden del Día y deberá ser enviada al Consejo de Administración. La misma deberá realizarse dentro de los treinta (30) días de solicitada en concordancia con lo que marca el Estatuto Social. Si la asamblea ordinaria se realizará dentro de los noventa (90) días de realizado el pedido, el Consejo de Administración podrá denegarla, debiendo incluir los puntos solicitados dentro del orden del día de la Asamblea Ordinaria.",
-        "Solicitar a la Sindicatura información sobre la marcha de la Cooperativa y la verificación de los Estados Contables.",
-        "Gozar de un período anual de licencias (vacaciones) acorde a su antigüedad.",
-        "Como monotributistas, o en otro régimen previsional, contarán con aportes al sistema jubilatorio, obra social. Mantendrán un seguro de accidentes personales, un seguro de vida o el que lo reemplace según el sistema previsional elegido.",
-        "Podrán retirarse voluntariamente de la Cooperativa, dando aviso por escrito con treinta (30) días de antelación por lo menos. Al retirarse se le reintegrarán los aportes efectivamente realizados en cuotas sociales durante su permanencia como persona asociada. En el caso que la persona asociada renunciante tuviera deudas pendientes con la Cooperativa, a la suma de referencia se le deducirá el importe que corresponda."
+        {"- Ser elector/a y elegido/a para el desempeño de los diferentes cargos",
+         "Ser elector/a y elegido/a para el desempeño de los diferentes cargos en los marcos que establece el Estatuto Social y el presente Reglamento Interno."},
+        {"- Firma del cincuenta por ciento (50%)",
+         "Con la firma del cincuenta por ciento (50%) del total de las personas asociadas, se podrá solicitar la realización de asambleas extraordinarias. Esta convocatoria deberá expresar concretamente los puntos del Orden del Día y deberá ser enviada al Consejo de Administración. La misma deberá realizarse dentro de los treinta (30) días de solicitada en concordancia con lo que marca el Estatuto Social. Si la asamblea ordinaria se realizará dentro de los noventa (90) días de realizado el pedido, el Consejo de Administración podrá denegarla, debiendo incluir los puntos solicitados dentro del orden del día de la Asamblea Ordinaria."},
+        {"- Solicitar a la Sindicatura información",
+         "Solicitar a la Sindicatura información sobre la marcha de la Cooperativa y la verificación de los Estados Contables."},
+        {"- Gozar de un período anual de licencias",
+         "Gozar de un período anual de licencias (vacaciones) acorde a su antigüedad."},
+        {"- Contarán con aportes al sistema jubilatorio, obra social",
+         "Como monotributistas, o en otro régimen previsional, contarán con aportes al sistema jubilatorio, obra social. Mantendrán un seguro de accidentes personales, un seguro de vida o el que lo reemplace según el sistema previsional elegido."},
+        {"- Podrán retirarse voluntariamente de la Cooperativa",
+         "Podrán retirarse voluntariamente de la Cooperativa, dando aviso por escrito con treinta (30) días de antelación por lo menos. Al retirarse se le reintegrarán los aportes efectivamente realizados en cuotas sociales durante su permanencia como persona asociada. En el caso que la persona asociada renunciante tuviera deudas pendientes con la Cooperativa, a la suma de referencia se le deducirá el importe que corresponda."}
       ],
       nested_questions: nil,
       result_template: "ARTICULO {NUMBER}: Son derechos de las personas asociadas: {OPTIONS}"
