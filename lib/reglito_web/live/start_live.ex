@@ -32,10 +32,18 @@ defmodule ReglitoWeb.StartLive do
 
       <div class="flex-1 mx-10 mt-5 mb-5">
         <div class="px-5 py-4 min-h-64 max-h-64  overflow-y-scroll bg-gray-100 rounded-md w-full flex flex-col">
-          <%= for rule <- @rules do %>
-            <div>
-              <p><%= rule %></p>
+          <%= if Enum.empty?(@rules) do %>
+            <div class="flex justify-center mt-24">
+              <h1 class="text-xl font-bold">
+                Responda la primer pregunta para comenzar...
+              </h1>
             </div>
+          <% else %>
+            <%= for rule <- @rules do %>
+              <div>
+                <p><%= rule %></p>
+              </div>
+            <% end %>
           <% end %>
         </div>
       </div>
