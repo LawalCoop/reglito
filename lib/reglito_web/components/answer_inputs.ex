@@ -96,11 +96,13 @@ defmodule ReglitoWeb.Components.AnswerInputs do
       if new_question_number < 0 do
         socket
       else
+        question = Enum.at(socket.assigns.questions, new_question_number)
         send(self(), {:new_question, new_question_number})
+        send_chapter_code(question.chapter)
 
         socket
         |> assign(:question_number, new_question_number)
-        |> assign(:question, Enum.at(socket.assigns.questions, new_question_number))
+        |> assign(:question, question)
         |> assign(:is_the_last_one, false)
         |> assign(:form, to_form(answers))
       end
@@ -112,11 +114,12 @@ defmodule ReglitoWeb.Components.AnswerInputs do
     question_quantity = length(socket.assigns.questions) - 1
     new_question_number = socket.assigns.question_number + 1
     answers = Map.delete(params, "save")
+    question = Enum.at(socket.assigns.questions, new_question_number)
 
     socket =
       socket
       |> assign(:question_number, new_question_number)
-      |> assign(:question, Enum.at(socket.assigns.questions, new_question_number))
+      |> assign(:question, question)
       |> assign(:form, to_form(answers))
 
     socket =
@@ -125,6 +128,7 @@ defmodule ReglitoWeb.Components.AnswerInputs do
         else: socket
 
     send(self(), {:new_question, new_question_number})
+    send_chapter_code(question.chapter)
 
     {:noreply, socket}
   end
